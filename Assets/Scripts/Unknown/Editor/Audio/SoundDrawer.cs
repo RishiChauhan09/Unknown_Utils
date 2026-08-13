@@ -2,163 +2,106 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Unknown.EditorExtensions;
 
 namespace Unknown.Audio {
 
-    [CustomPropertyDrawer(typeof(Sound))]
-    public class SoundDrawer : PropertyDrawer {
+    [CustomEditor(typeof(Sound))]
+    public class SoundDrawer : Editor {
 
-        public override VisualElement CreatePropertyGUI(SerializedProperty property) {
+        public override VisualElement CreateInspectorGUI() {
             var root = new VisualElement();
 
             // -----------------------------------------
             // Properties
             // -----------------------------------------
 
-            // name
-            var name = property.FindPropertyRelative(nameof(Sound.name));
+            // id
+            var id = serializedObject.FindProperty(nameof(Sound.id));
 
             // volume
-            var useRandomVolume = property.FindPropertyRelative(nameof(Sound.useRandomVolume));
+            var useRandomVolume = serializedObject.FindProperty(nameof(Sound.useRandomVolume));
 
-            var randomVolumeRange = property.FindPropertyRelative(nameof(Sound.randomVolumeRange));
+            var randomVolumeRange = serializedObject.FindProperty(nameof(Sound.randomVolumeRange));
 
-            var volume = property.FindPropertyRelative(nameof(Sound.volume));
+            var volume = serializedObject.FindProperty(nameof(Sound.volume));
 
             // pitch
-            var useRandomPitch = property.FindPropertyRelative(nameof(Sound.useRandomPitch));
+            var useRandomPitch = serializedObject.FindProperty(nameof(Sound.useRandomPitch));
 
-            var randomPitchRange = property.FindPropertyRelative(nameof(Sound.randomPitchRange));
+            var randomPitchRange = serializedObject.FindProperty(nameof(Sound.randomPitchRange));
 
-            var pitch = property.FindPropertyRelative(nameof(Sound.pitch));
+            var pitch = serializedObject.FindProperty(nameof(Sound.pitch));
 
             // other settings
-            var cooldownTime = property.FindPropertyRelative(nameof(Sound.cooldownTime));
+            var cooldownTime = serializedObject.FindProperty(nameof(Sound.cooldownTime));
 
-            var selectionMode = property.FindPropertyRelative(nameof(Sound.defaultSelectionMode));
+            var selectionMode = serializedObject.FindProperty(nameof(Sound.defaultSelectionMode));
 
-            var sequenceResetTimer = property.FindPropertyRelative(nameof(Sound.sequenceResetTimer));
+            var sequenceResetTimer = serializedObject.FindProperty(nameof(Sound.sequenceResetTimer));
 
-            var clips = property.FindPropertyRelative(nameof(Sound.clips));
-
-            // -----------------------------------------
-            // Starting of drawing fields 
-            // -----------------------------------------
-            int index = GetArrayIndex(property);
-
-            if(index % 2 == 0) {
-                root.style.backgroundColor = StyleKeyword.Null;
-            } else {
-                root.style.backgroundColor = new Color(0, 0, 0, 0.05f);
-            }
-
-            var soundFoldout = new Foldout {
-                text = name.stringValue,
-                value = false,
-                viewDataKey = $"{property.propertyPath}_SoundMain"
-            };
+            var clips = serializedObject.FindProperty(nameof(Sound.clips));
 
             // -----------------------------------------
             // Name
             // -----------------------------------------
 
-            var nameField = new PropertyField(name, "Name");
+            var nameField = new PropertyField(id, "Name");
 
-            soundFoldout.Add(nameField);
+            root.Add(nameField);
 
             // -----------------------------------------
             // Volume
             // -----------------------------------------
 
-            var volumeFoldout = new Foldout {
-                text = "Volume",
-                value = false,
-                viewDataKey = $"{property.propertyPath}_Volume"
-            };
+            root.AddHeader("Volume");
 
             var useRandomVolumeField = new PropertyField(useRandomVolume, "Use Random Volume");
 
-            var randomVolumeRangeField = new PropertyField(randomVolumeRange, "Random Range");
-
-            var volumeField = new PropertyField(volume, "Volume");
-
-            volumeFoldout.Add(useRandomVolumeField);
-            volumeFoldout.Add(randomVolumeRangeField);
-            volumeFoldout.Add(volumeField);
-
-            soundFoldout.Add(volumeFoldout);
+            root.Add(useRandomVolumeField);
+            var randomVolumeRangeField = root.AddMinMaxSlider("Random Volume", randomVolumeRange, 0f, 1f);
+            var volumeSlider = root.AddFloatSlider("Volume", volume, 0, 1);
 
             // -----------------------------------------
             // Pitch
             // -----------------------------------------
 
-            var pitchFoldout = new Foldout {
-                text = "Pitch",
-                value = false,
-                viewDataKey = $"{property.propertyPath}_Pitch"
-            };
+            root.AddHeader("Pitch");
 
             var useRandomPitchField = new PropertyField(useRandomPitch, "Use Random Pitch");
 
-            var randomPitchRangeField = new PropertyField(randomPitchRange, "Random Range");
-
-            var pitchField = new PropertyField(pitch, "Pitch");
-
-            pitchFoldout.Add(useRandomPitchField);
-            pitchFoldout.Add(randomPitchRangeField);
-            pitchFoldout.Add(pitchField);
-
-            soundFoldout.Add(pitchFoldout);
+            root.Add(useRandomPitchField);
+            var randomPitchRangeField = root.AddMinMaxSlider("Random Pitch", randomPitchRange, -3f, 3f);
+            var pitchSlider = root.AddFloatSlider("Pitch", pitch, -3, 3);
 
             // -----------------------------------------
             // Other Settings
             // -----------------------------------------
 
-            var otherFoldout = new Foldout {
-                text = "Other Settings",
-                value = false,
-                viewDataKey = $"{property.propertyPath}_Other"
-            };
+            root.AddHeader("Other Settings");
 
-            otherFoldout.Add(new PropertyField(cooldownTime, "Cooldown"));
-
-            soundFoldout.Add(otherFoldout);
-
+            root.Add(new PropertyField(cooldownTime, "Cooldown"));
 
             // -----------------------------------------
             // Clip Selection
             // -----------------------------------------
 
-            var selectionFoldout = new Foldout {
-                text = "Clip Selection",
-                value = false
-            };
+            root.AddHeader("Clip Selection");
 
             var selectionModeField = new PropertyField(selectionMode, "Selection Mode");
 
             var sequenceResetTimerField = new PropertyField(sequenceResetTimer, "Reset Timer");
 
-            selectionFoldout.Add(selectionModeField);
-            selectionFoldout.Add(sequenceResetTimerField);
-
-            soundFoldout.Add(selectionFoldout);
-
+            root.Add(selectionModeField);
+            root.Add(sequenceResetTimerField);
 
             // -----------------------------------------
             // Clips
             // -----------------------------------------
 
-            var clipsFoldout = new Foldout {
-                text = "Clips",
-                value = false,
-                viewDataKey = $"{property.propertyPath}_Clips"
-            };
+            root.AddHeader("Clip");
 
-            clipsFoldout.Add(new PropertyField(clips, "Audio Clips"));
-
-            soundFoldout.Add(clipsFoldout);
-
-            root.Add(soundFoldout);
+            root.Add(new PropertyField(clips, "Audio Clips"));
 
             // -----------------------------------------
             // Initial visibility
@@ -185,10 +128,6 @@ namespace Unknown.Audio {
                 UpdateSequenceVisibility();
             });
 
-            nameField.RegisterValueChangeCallback(_ => {
-                UpdateFoldoutName();
-            });
-
 
             // -----------------------------------------
             // Local functions
@@ -197,13 +136,13 @@ namespace Unknown.Audio {
             void UpdateVolumeVisibility() {
                 randomVolumeRangeField.style.display = useRandomVolume.boolValue ? DisplayStyle.Flex : DisplayStyle.None;
 
-                volumeField.style.display = useRandomVolume.boolValue ? DisplayStyle.None : DisplayStyle.Flex;
+                volumeSlider.style.display = useRandomVolume.boolValue ? DisplayStyle.None : DisplayStyle.Flex;
             }
 
             void UpdatePitchVisibility() {
                 randomPitchRangeField.style.display = useRandomPitch.boolValue ? DisplayStyle.Flex : DisplayStyle.None;
 
-                pitchField.style.display = useRandomPitch.boolValue ? DisplayStyle.None : DisplayStyle.Flex;
+                pitchSlider.style.display = useRandomPitch.boolValue ? DisplayStyle.None : DisplayStyle.Flex;
             }
 
             void UpdateSequenceVisibility() {
@@ -214,23 +153,7 @@ namespace Unknown.Audio {
                 sequenceResetTimerField.style.display = showResetTimer ? DisplayStyle.Flex : DisplayStyle.None;
             }
 
-            void UpdateFoldoutName() {
-                soundFoldout.text = string.IsNullOrEmpty(name.stringValue) ? "-----" : name.stringValue;
-            }
-
             return root;
-        }
-
-        private int GetArrayIndex(SerializedProperty property) {
-            string path = property.propertyPath;
-
-            int start = path.LastIndexOf('[');
-            int end = path.LastIndexOf(']');
-
-            if(start == -1 || end == -1)
-                return -1;
-
-            return int.Parse(path.Substring(start + 1, end - start - 1));
         }
 
     }

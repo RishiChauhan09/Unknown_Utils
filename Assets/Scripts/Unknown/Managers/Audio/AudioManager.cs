@@ -23,21 +23,21 @@ namespace Unknown.Audio {
             musicLookup = new Dictionary<string, Sound>();
 
             foreach(Sound s in sfx) {
-                if(sfxLookup.ContainsKey(s.name)) {
-                    Debug.Log("Duplicated sfx name : " + s.name);
+                if(sfxLookup.ContainsKey(s.id)) {
+                    Debug.Log("Duplicated sfx name : " + s.id);
                     continue;
                 }
 
-                sfxLookup[s.name] = s;
+                sfxLookup[s.id] = s;
             }
 
             foreach(Sound s in music) {
-                if(musicLookup.ContainsKey(s.name)) {
-                    Debug.Log("Duplicate music name : " + s.name);
+                if(musicLookup.ContainsKey(s.id)) {
+                    Debug.Log("Duplicate music name : " + s.id);
                     return;
                 }
 
-                musicLookup[s.name] = s;
+                musicLookup[s.id] = s;
             }
         }
 

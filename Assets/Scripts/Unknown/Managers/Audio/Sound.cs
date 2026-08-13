@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Unknown.Audio {
 
-    [System.Serializable]
-    public class Sound {
-        public string name;
+    [CreateAssetMenu(fileName = "Sound", menuName = "Unknown/Sound")]
+    public class Sound : ScriptableObject {
+        public string id;
 
         // volume
         public bool useRandomVolume;
@@ -157,6 +157,10 @@ namespace Unknown.Audio {
         }
 
         #endregion
+
+        private void OnValidate() {
+            id = name;
+        }
 
     }
 }
