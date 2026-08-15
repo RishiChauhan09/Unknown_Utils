@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 924cf79a88f3c7c44a50ddf71f79a8cb, type: 3}
+  m_Name: Music 1
+  m_EditorClassIdentifier: Assembly-CSharp::Unknown.Audio.Sound
+  id: 
+  useRandomVolume: 0
+  randomVolumeRange: {x: 0.9, y: 1}
+  volume: 1
+  useRandomPitch: 0
+  pitch: 1
+  randomPitchRange: {x: 0.95, y: 1.05}
+  cooldownTime: 0
+  defaultSelectionMode: 0
+  sequenceResetTimer: 1
+  clips: []
+  sequenceForward: 1
+  lastAudioIndex: 0
+  lastPlayTime: 0
+  lastAudioPlayed: 0
