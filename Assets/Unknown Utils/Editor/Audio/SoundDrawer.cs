@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Unknown.EditorExtensions;
 
-namespace Unknown.Audio {
+namespace Unknown.Manager {
 
     [CustomEditor(typeof(Sound))]
     public class SoundDrawer : Editor {

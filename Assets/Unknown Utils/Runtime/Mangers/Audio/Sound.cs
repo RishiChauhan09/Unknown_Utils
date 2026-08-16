@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Unknown.Audio {
+namespace Unknown.Manager {
 
     [CreateAssetMenu(fileName = "Sound", menuName = "Unknown/Sound")]
     public class Sound : ScriptableObject {

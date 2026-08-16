@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Unknown.Audio {
+namespace Unknown.Manager {
 
     public class SimpleAudioManager : MonoBehaviour {
 
