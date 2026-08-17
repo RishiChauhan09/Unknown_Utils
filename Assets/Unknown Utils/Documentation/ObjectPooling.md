@@ -30,7 +30,7 @@ Initial size is on awake how many objects you want to spawn it's same for all po
 
 ## Example
 
-```
+```csharp
 PoolObject poolObject = PoolManager.Instance.GetPoolObject("Obj1");
 
 // and after the work is done just do 
