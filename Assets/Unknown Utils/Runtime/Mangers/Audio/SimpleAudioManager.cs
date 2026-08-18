@@ -1,4 +1,4 @@
-// version : v0.5
+// version : v0.6
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,13 +11,13 @@ namespace Unknown.Manager {
         [SerializeField] private Sound[] sfx, music;
         [SerializeField] public AudioSource sfxAudioSource, musicAudioSource;
 
-        private Dictionary<string, Sound> sfxLookup, musicLookup;            // making dictionary so that there is no need for running foreach everytime for sound
+        private Dictionary<string, SoundRuntime> sfxLookup, musicLookup;            // making dictionary so that there is no need for running foreach everytime for sound
 
         #region Unity Methods
 
         private void Awake() {
-            sfxLookup = new Dictionary<string, Sound>();
-            musicLookup = new Dictionary<string, Sound>();
+            sfxLookup = new Dictionary<string, SoundRuntime>();
+            musicLookup = new Dictionary<string, SoundRuntime>();
 
             foreach(Sound s in sfx) {
                 if(sfxLookup.ContainsKey(s.id)) {
@@ -25,7 +25,7 @@ namespace Unknown.Manager {
                     continue;
                 }
 
-                sfxLookup[s.id] = s;
+                sfxLookup[s.id] = new SoundRuntime(s);
             }
 
             foreach(Sound s in music) {
@@ -34,7 +34,7 @@ namespace Unknown.Manager {
                     return;
                 }
 
-                musicLookup[s.id] = s;
+                musicLookup[s.id] = new SoundRuntime(s);
             }
         }
 
@@ -48,11 +48,11 @@ namespace Unknown.Manager {
         /// Plays sfx using sfx audio source
         /// </summary>
         public void PlaySFX(string name, float delay = 0) {
-            if(!TryGetSound(name, out Sound sound, out AudioClip clip)) {
+            if(!TryGetSound(name, out SoundRuntime soundRuntime, out AudioClip clip)) {
                 return;
             }
 
-            sfxAudioSource.volume = sound.GetVolume();
+            sfxAudioSource.volume = soundRuntime.GetVolume();
             sfxAudioSource.clip = clip;
 
             if(delay > 0) {
@@ -69,16 +69,16 @@ namespace Unknown.Manager {
         /// Plays one shot from the string name provided
         /// </summary>
         public void PlayOneShot(string name, float delay = 0) {
-            if(!TryGetSound(name, out Sound sound, out AudioClip clip)) {
+            if(!TryGetSound(name, out SoundRuntime soundRuntime, out AudioClip clip)) {
                 return;
             }
 
             if(delay > 0) {
                 StartCoroutine(WaitAndRun(delay, () => {
-                    sfxAudioSource.PlayOneShot(clip, sound.GetVolume());
+                    sfxAudioSource.PlayOneShot(clip, soundRuntime.GetVolume());
                 }));
             } else {
-                sfxAudioSource.PlayOneShot(clip, sound.GetVolume());
+                sfxAudioSource.PlayOneShot(clip, soundRuntime.GetVolume());
             }
 
         }
@@ -152,7 +152,7 @@ namespace Unknown.Manager {
         /// Plays music using music audio source provided
         /// </summary>
         public void PlayMusic(string name) {
-            Sound sound = null;
+            SoundRuntime sound = null;
             if(!musicLookup.TryGetValue(name, out sound))
                 return;
 
@@ -213,19 +213,19 @@ namespace Unknown.Manager {
 
         #region Private Methods
 
-        private bool TryGetSound(string name, out Sound sound, out AudioClip clip) {
-            sound = null;
+        private bool TryGetSound(string name, out SoundRuntime soundRuntime, out AudioClip clip) {
+            soundRuntime = null;
             clip = null;
 
-            if(!sfxLookup.TryGetValue(name, out sound))
+            if(!sfxLookup.TryGetValue(name, out soundRuntime))
                 return false;
 
-            clip = sound.GetClip();
+            clip = soundRuntime.GetClip();
 
             if(clip == null)
                 return false;
 
-            sfxAudioSource.pitch = sound.GetPitch();
+            sfxAudioSource.pitch = soundRuntime.GetPitch();
 
             return true;
         }
