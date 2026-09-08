@@ -1,4 +1,4 @@
-// version : v0.6
+// version : v0.7
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,6 +66,25 @@ namespace Unknown.Manager {
         }
 
         /// <summary>
+        /// Plays sfx using sfx audio source
+        /// </summary>
+        public void PlaySFX(Sound sound, float delay = 0) {
+            AddSoundRuntime(sound, sfxLookup);
+
+            if(!TryGetSound(name, out SoundRuntime soundRuntime, out AudioClip clip)) {
+                return;
+            }
+
+            if(delay > 0) {
+                StartCoroutine(WaitAndRun(delay, () => {
+                    sfxAudioSource.Play();
+                }));
+            } else {
+                sfxAudioSource.Play();
+            }
+        }
+
+        /// <summary>
         /// Plays one shot from the string name provided
         /// </summary>
         public void PlayOneShot(string name, float delay = 0) {
@@ -99,6 +118,25 @@ namespace Unknown.Manager {
             } else {
                 sfxAudioSource.pitch = audioClipParameters.pitch;
                 sfxAudioSource.PlayOneShot(clip, audioClipParameters.volume);
+            }
+        }
+
+        /// <summary>
+        /// Plays one shot form the sound provided
+        /// </summary>
+        public void PlayOneShot(Sound sound, float delay = 0) {
+            AddSoundRuntime(sound, sfxLookup);
+
+            if(!TryGetSound(name, out SoundRuntime soundRuntime, out AudioClip clip)) {
+                return;
+            }
+
+            if(delay > 0) {
+                StartCoroutine(WaitAndRun(delay, () => {
+                    sfxAudioSource.PlayOneShot(clip, soundRuntime.GetVolume());
+                }));
+            } else {
+                sfxAudioSource.PlayOneShot(clip, soundRuntime.GetVolume());
             }
         }
 
@@ -160,6 +198,21 @@ namespace Unknown.Manager {
 
             if(clip == null)
                 return;
+
+            musicAudioSource.clip = clip;
+            musicAudioSource.Play();
+        }
+
+        /// <summary>
+        /// Plays Music using sound SO provided
+        /// </summary>
+        public void PlayMusic(Sound sound) {
+            AddSoundRuntime(sound, musicLookup);
+
+            if(!musicLookup.TryGetValue(name, out SoundRuntime s))
+                return;
+
+            AudioClip clip = s.GetClip();
 
             musicAudioSource.clip = clip;
             musicAudioSource.Play();
@@ -228,6 +281,15 @@ namespace Unknown.Manager {
             sfxAudioSource.pitch = soundRuntime.GetPitch();
 
             return true;
+        }
+
+        /// <summary>
+        /// Add if the sound of that is not available in that dictionary
+        /// </summary>
+        private void AddSoundRuntime(Sound sound, Dictionary<string, SoundRuntime> dict) {
+            if(!dict.ContainsKey(sound.id)) {
+                dict[sound.id] = new SoundRuntime(sound);
+            }
         }
 
         #endregion
