@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6172410931904388871}
-  - component: {fileID: 8531832936352523310}
+  - component: {fileID: 8480315145807008180}
   m_Layer: 0
   m_Name: Music AudioSource
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1684876804329812806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &8531832936352523310
+--- !u!82 &8480315145807008180
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +41,13 @@ AudioSource:
   m_GameObject: {fileID: 2985488869677975664}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -2011641997960605512, guid: 989629c5188c4374d960ed7ee75a7c5f, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -138,7 +138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7935705075286096673}
-  - component: {fileID: 1971734319846550210}
+  - component: {fileID: 6186189748277169414}
   m_Layer: 0
   m_Name: SFX AudioSource
   m_TagString: Untagged
@@ -161,7 +161,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1684876804329812806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &1971734319846550210
+--- !u!82 &6186189748277169414
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,7 +170,7 @@ AudioSource:
   m_GameObject: {fileID: 5056252959068206406}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -2639602729473889358, guid: 989629c5188c4374d960ed7ee75a7c5f, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -308,5 +308,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f432ec89a16aa874dbd81197abe16416, type: 2}
   music:
   - {fileID: 11400000, guid: 8e5836908c03fa1469ae6372f9685a52, type: 2}
-  sfxAudioSource: {fileID: 1971734319846550210}
-  musicAudioSource: {fileID: 8531832936352523310}
+  sfxAudioSource: {fileID: 6186189748277169414}
+  musicAudioSource: {fileID: 8480315145807008180}
