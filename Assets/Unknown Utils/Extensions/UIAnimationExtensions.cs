@@ -112,16 +112,16 @@ namespace Unknown.Extensions {
             Vector2 startingPos = Vector2.zero;
 
             if(direction == Vector2.down) {
-                startingPos = new Vector2(0f, Screen.height);
+                startingPos = new Vector2(finalPos.x, Screen.height);
 
             } else if(direction == Vector2.up) {
-                startingPos = new Vector2(0f, -Screen.height);
+                startingPos = new Vector2(finalPos.x, -Screen.height);
 
             } else if(direction == Vector2.left) {
-                startingPos = new Vector2(Screen.width, 0f);
+                startingPos = new Vector2(Screen.width, finalPos.y);
 
             } else if(direction == Vector2.right) {
-                startingPos = new Vector2(-Screen.width, 0f);
+                startingPos = new Vector2(-Screen.width, finalPos.y);
             }
 
             rect.anchoredPosition = startingPos;
