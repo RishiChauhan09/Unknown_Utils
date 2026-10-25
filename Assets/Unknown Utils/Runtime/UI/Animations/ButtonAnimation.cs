@@ -5,31 +5,38 @@ using UnityEngine.UI;
 
 namespace Unknown.UI {
 
+    [RequireComponent(typeof(Button))]
     public class ButtonAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler {
 
-        [SerializeField] private ButtonAnimationSO buttonAnimationSettings;
-
-        [SerializeField] protected Image buttonImage;
-        [SerializeField] protected Button button;
-
+        [SerializeField] private ButtonAnimationSettings buttonAnimationSettings;
+        
+        protected Button button;
+        protected Graphic buttonGraphic;
         protected Color startColor;
 
-        private void Start() {
-            if(buttonImage == null)
-                buttonImage = GetComponent<Image>();
+        private void Awake() {
             if(button == null)
                 button = GetComponent<Button>();
-            startColor = buttonImage.color;
+
+            if(buttonGraphic == null)
+                buttonGraphic = button.targetGraphic;
+
+            startColor = buttonGraphic.color;
+        }
+
+        private void OnEnable() {
+            if(buttonGraphic != null)
+                startColor = buttonGraphic.color;
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
             if(!buttonAnimationSettings.isHoverColorChangeOn) return;
-            buttonImage.DOColor(buttonAnimationSettings.hoverColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
+            buttonGraphic.DOColor(buttonAnimationSettings.hoverColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
         }
 
         public void OnPointerExit(PointerEventData eventData) {
             if(!buttonAnimationSettings.isHoverColorChangeOn) return;
-            buttonImage.DOColor(startColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
+            buttonGraphic.DOColor(startColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
         }
 
         public void OnPointerDown(PointerEventData eventData) {
@@ -47,19 +54,32 @@ namespace Unknown.UI {
 
         private void OnDisable() {
             if(!buttonAnimationSettings.isHoverColorChangeOn) return;
-            buttonImage.DOColor(startColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
+            buttonGraphic.DOColor(startColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
         }
 
         public void SetSelected() {
             if(!button.enabled)
                 return;
-            buttonImage.DOColor(buttonAnimationSettings.selectedColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
+            buttonGraphic.DOColor(buttonAnimationSettings.selectedColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
         }
 
         public void SetUnSelected() {
             if(!button.enabled)
                 return;
-            buttonImage.DOColor(startColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
+            buttonGraphic.DOColor(startColor, buttonAnimationSettings.hoverAnimationTime).SetUpdate(true);
         }
+    }
+
+    [System.Serializable]
+    public class ButtonAnimationSettings {
+        public Color hoverColor = Color.red;
+        public Color selectedColor = Color.red;
+
+        public bool isHoverColorChangeOn = false;
+        public bool onClickScaleAnimation = true;
+
+        public float hoverAnimationTime = .15f;
+        public float buttonScaleOnClick = .9f;
+        public float buttonClickAnimationTime = .1f;
     }
 }

@@ -14,6 +14,16 @@ namespace Unknown.Extensions {
         }
 
         /// <summary>
+        /// does a specific method for each and every child in trasnform
+        /// </summary>
+        public static void ForEverySubChild(this Transform transform, System.Action<Transform> method) {
+            foreach(Transform child in transform) {
+                method?.Invoke(child);
+                child.ForEverySubChild(method);
+            }
+        }
+
+        /// <summary>
         /// disable all children of this transform 
         /// </summary>
         public static void DisableChildren(this Transform transform) {
