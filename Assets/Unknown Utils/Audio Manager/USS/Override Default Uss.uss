@@ -1,0 +1,68 @@
+:root {
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport {
+    width: 100%;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    justify-content: center;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container {
+    flex-shrink: 0;
+    flex-grow: 1;
+    justify-content: space-evenly;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header {
+    flex-shrink: 0;
+    flex-grow: 1;
+    -unity-font-style: bold;
+    justify-content: center;
+    background-color: rgb(56, 56, 56);
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header:hover {
+    flex-shrink: 0;
+    flex-grow: 1;
+    -unity-font-style: bold;
+    justify-content: center;
+    transition-duration: 0.1s;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header:checked {
+    flex-shrink: 0;
+    flex-grow: 1;
+    -unity-font-style: bold;
+    justify-content: center;
+    background-color: rgb(48, 48, 48);
+    transition-duration: 0.1s;
+    scale: 1 1;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header:checked > #unity-tab__header-underline {
+    scale: 1 1;
+    transition-duration: 0.25s;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header > #unity-tab__header-underline {
+    scale: 0 1;
+    transition-duration: 0.25s;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header:hover > #unity-tab__header-label {
+    transition-duration: 0.25s;
+    scale: 1.1 1.1;
+}
+
+#unknown-audio-config > #main-tabview > .unity-tab-view__content-viewport > #unity-tab-view__header-container > #unity-tab__header > #unity-tab__header-label {
+    rotate: 0 0 0 2deg;
+    transition-duration: 0.25s;
+    scale: 1 1;
+}

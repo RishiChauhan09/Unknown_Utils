@@ -1,0 +1,55 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Unknown%20Utils/Audio%20Manager/USS/EditorUss.uss?fileID=7433441132597879392&amp;guid=8260b381bade7c3408a4340bf2b4ee9a&amp;type=3#EditorUss"/>
+    <Style src="project://database/Assets/Unknown%20Utils/Audio%20Manager/USS/Override%20Default%20Uss.uss?fileID=7433441132597879392&amp;guid=1aa52c0a64b604d44860249e7a32f809&amp;type=3#Override Default Uss"/>
+    <ui:VisualElement name="unknown-audio-config" style="flex-shrink: 0; justify-content: space-between;">
+        <ui:TextField label="" placeholder-text="Audio Config Name" name="AudioConfigName" binding-path="&lt;audioConfigName&gt;k__BackingField" style="margin-bottom: 7px; margin-top: 7px;"/>
+        <ui:VisualElement name="clipslection-playaudio" style="flex-grow: 1; flex-direction: row; margin-bottom: 7px;">
+            <ui:EnumField label="" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="ClipSelection" binding-path="clipSelectionStrategyType" tooltip="Decides how the clip is selected to play." style="flex-grow: 1;"/>
+            <ui:EnumField label="" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="AudioType" binding-path="audioType" tooltip="Type of audio" style="width: 75px;"/>
+            <ui:Button text="Play Audio" name="PlayButton" style="flex-grow: 0.25;"/>
+        </ui:VisualElement>
+        <ui:TabView name="main-tabview" style="flex-grow: 1; flex-shrink: 0; flex-direction: column; background-color: rgb(48, 48, 48); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; margin-left: 0; margin-right: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-bottom: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:Tab label="Clips Settings" name="ClipsSettings" tooltip="For changing settings of single cilps" style="flex-grow: 1; flex-direction: column; flex-shrink: 0; width: 100%; margin-top: 10px; padding-top: 0; padding-right: 7px; padding-bottom: 7px; padding-left: 7px;">
+                <ui:ListView binding-path="audioClips" show-border="true" reorderable="true" show-foldout-header="true" header-title="Audio Clips" reorder-mode="Animated" show-bound-collection-size="true" show-add-remove-footer="true" name="audioClipsListView" show-alternating-row-backgrounds="All" tooltip="List of audio clips for clip selection method." style="margin-bottom: 7px; margin-left: 7px;"/>
+                <ui:VisualElement name="UnknownAudioClipData" style="flex-grow: 1; flex-shrink: 0;">
+                    <ui:VisualElement name="Positions" style="flex-grow: 1; flex-direction: row; margin-bottom: 2px;">
+                        <ui:FloatField label="Start Pos" value="0" data-source-path="" name="clipStartPos" max-length="1000" tooltip="Starting pos of audio clip normalized." style="flex-grow: 1; margin-top: 0; margin-right: 6px; margin-bottom: 0; margin-left: 0; width: 45%;"/>
+                        <ui:FloatField label="End Pos" value="1" data-source-path="" name="clipEndPos" tooltip="Ending pos of audio clip normalized." style="flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 6px; width: 45%;"/>
+                    </ui:VisualElement>
+                    <ui:FloatField label="Delay" value="0" data-source-path="clipDelay" name="clipDelay" style="margin-bottom: 4px; margin-left: 0;"/>
+                </ui:VisualElement>
+                <ui:MinMaxSlider label="" value="0,1" low-limit="0" high-limit="1" name="trimSlider" style="margin-right: 0; margin-left: 0; margin-top: 0; margin-bottom: 0;"/>
+                <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;">
+                    <ui:Image name="audioImage"/>
+                    <ui:VisualElement enabled="true" style="flex-grow: 1; flex-shrink: 0; opacity: 0.45; position: absolute; top: 0; right: 0; bottom: 0; left: 0;">
+                        <ui:Image name="startPosImage" picking-mode="Ignore" style="background-color: rgb(130, 130, 130); flex-shrink: 0; flex-grow: 1; position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+                        <ui:Image name="endPosImage" picking-mode="Ignore" style="background-color: rgb(130, 130, 130); flex-shrink: 0; flex-grow: 1; position: absolute; top: 0; right: 0; bottom: 0; left: 0;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:Tab>
+            <ui:Tab label="Overall Settings" name="GlobalSettings" tooltip="Overall settings for this audio config" style="flex-grow: 1; flex-direction: column; flex-shrink: 0; width: 100%; margin-top: 10px; padding-top: 0; padding-right: 7px; padding-bottom: 7px; padding-left: 7px;">
+                <ui:VisualElement name="master-volume-visual" style="flex-grow: 1; flex-direction: row; margin-bottom: 3px;">
+                    <ui:Label text="Master Volume" style="width: 100px;"/>
+                    <ui:Slider label="" value="42" high-value="1" name="master-volume-slider" fill="true" binding-path="masterVolume.y" show-input-field="true" tooltip="Master volume for this audio config." style="margin-right: 10px; flex-grow: 1;"/>
+                    <ui:VisualElement name="master-volume-slider-minmax" style="flex-grow: 1; flex-direction: row; display: none;">
+                        <ui:FloatField label="" value="42.2" binding-path="masterVolume.x" style="width: 40px; margin-right: 3px;"/>
+                        <ui:MinMaxSlider label="" value="0.9,1" low-limit="0" high-limit="1" name="" tooltip="Master volume range for this audio config." binding-path="masterVolume" style="flex-grow: 1; display: flex;"/>
+                        <ui:FloatField label="" value="1" binding-path="masterVolume.y" style="width: 40px; margin-left: 7px;"/>
+                    </ui:VisualElement>
+                    <uie:ToolbarToggle label="Rnd" name="volume-rnd-toggle" value="false" text="" data-source="" data-source-type="Unknown.Manager.AudioManager.UnknownAudioConfig, Assembly-CSharp" data-source-path="" class="toolbar-toggle" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 4px; margin-bottom: 0; margin-left: 10px; width: 50px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="pitch-volume-visual" style="flex-grow: 1; flex-direction: row; margin-bottom: 3px;">
+                    <ui:Label text="Pitch" style="width: 100px;"/>
+                    <ui:Slider label="" value="42" high-value="3" name="pitch-slider" fill="true" binding-path="pitch.y" low-value="-3" show-input-field="true" style="margin-right: 10px; flex-grow: 1; display: flex;"/>
+                    <ui:VisualElement name="pitch-slider-minmax" style="flex-grow: 1; flex-direction: row; display: none;">
+                        <ui:FloatField label="" value="42.2" binding-path="pitch.x" style="width: 40px; margin-right: 3px;"/>
+                        <ui:MinMaxSlider label="" value="0.9,1" low-limit="-3" high-limit="3" name="" tooltip="Master volume range for this audio config." binding-path="pitch" style="flex-grow: 1; display: flex;"/>
+                        <ui:FloatField label="" value="1" binding-path="pitch.y" style="width: 40px; margin-left: 7px;"/>
+                    </ui:VisualElement>
+                    <uie:ToolbarToggle label="Rnd" name="pitch-rnd-toggle" value="false" text="" data-source="" data-source-type="Unknown.Manager.AudioManager.UnknownAudioConfig, Assembly-CSharp" data-source-path="" class="toolbar-toggle" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 4px; margin-bottom: 0; margin-left: 10px; width: 50px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;"/>
+                </ui:VisualElement>
+                <ui:Toggle label="Is Loop" tooltip="To play audio on loop" name="isLoop" binding-path="isLoop"/>
+            </ui:Tab>
+        </ui:TabView>
+    </ui:VisualElement>
+</ui:UXML>

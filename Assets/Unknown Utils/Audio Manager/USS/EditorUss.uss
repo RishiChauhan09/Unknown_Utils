@@ -1,0 +1,32 @@
+:root {
+}
+
+.toolbar-toggle {
+    background-color: rgb(43, 43, 43);
+    -unity-text-align: middle-left;
+    -unity-text-outline-width: 0;
+}
+
+.toolbar-toggle:hover {
+    background-color: rgb(89, 89, 89);
+}
+
+.toolbar-toggle:checked {
+    background-color: rgb(103, 103, 103);
+    transition-duration: 0.1s;
+}
+
+.toolbar-toggle:active {
+    background-color: rgb(137, 137, 137);
+    transition-duration: 0.1s;
+}
+
+.tab-button {
+}
+
+#unknown-audio-config > #main-tabview > #ClipsSettings > VisualElement > #trimSlider > .unity-min-max-slider__input > #unity-dragger {
+}
+
+#unknown-audio-config > #main-tabview > #ClipsSettings > VisualElement > #trimSlider > .unity-min-max-slider__input > #unity-tracker {
+    display: none;
+}
