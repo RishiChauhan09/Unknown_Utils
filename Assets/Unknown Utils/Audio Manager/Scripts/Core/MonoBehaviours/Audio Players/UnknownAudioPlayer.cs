@@ -11,6 +11,7 @@ namespace Unknown.Manager.AudioManager {
 
         // private variables
         private UnknownAudioConfig audioConfig;
+        private bool isPaused;
 
         // private values
         private float externalDelay;
@@ -26,24 +27,56 @@ namespace Unknown.Manager.AudioManager {
 
         #region abstract methods 
 
+        /// <inheritdoc/>
         public override UnknownAudioConfig GetAudioConfig() {
             return audioConfig;
         }
 
+        /// <inheritdoc/>
         public override AudioSource GetAudioSource() {
             return audioSource;
         }
 
+        /// <inheritdoc/>
         public override void Stop() {
-            if(audioSource.isPlaying)
-                audioSource.Stop();
+            if(!audioSource.isPlaying)
+                return;
+
+            RaiseOnAudioEnded();
+            Reset();
+            audioSource.Stop();
         }
 
+        /// <inheritdoc/>
         public override AudioType GetAudioType() {
             if(audioConfig == null)
                 return AudioType.None;
 
             return audioConfig.GetAudioType();
+        }
+
+        /// <inheritdoc/>
+        public override bool IsPlaying() {
+            return audioSource.isPlaying;
+        }
+
+        /// <inheritdoc/>
+        public override void Pause() {
+            if(!audioSource.isPlaying)
+                return;
+
+            isPaused = true;
+            audioSource.Pause();
+        }
+
+        /// <inheritdoc/>
+        public override void Resume() {
+            audioSource.Play();
+            isPaused = false;
+        }
+
+        public override bool IsPaused() {
+            return isPaused;
         }
 
         #endregion
@@ -53,6 +86,7 @@ namespace Unknown.Manager.AudioManager {
         private void Reset() {
             externalDelay = 0;
             audioConfig = null;
+            isPaused = false;
             ResetEvents();
         }
 
@@ -60,15 +94,23 @@ namespace Unknown.Manager.AudioManager {
 
         #region builder methods
 
+        /// <inheritdoc/>
         public override AudioPlayer SetAudioConfig(UnknownAudioConfig audioConfig) {
             Reset();
             this.audioConfig = audioConfig;
             return this;
         }
 
+        /// <inheritdoc/>
         public override AudioPlayer Play() {
             if(audioConfig == null)
                 return this;
+
+            StopAllCoroutines();
+
+            if(audioSource.isPlaying) {
+                audioSource.Stop();
+            }
 
             UnknownAudioClip uAudioClip = audioConfig.PickNewClip();
             AudioClip clip = uAudioClip.audioClip;
@@ -83,11 +125,13 @@ namespace Unknown.Manager.AudioManager {
             return this;
         }
 
+        /// <inheritdoc/>
         public override AudioPlayer OnAudioEnded(Action callbackMethod) {
             onAudioEnded += callbackMethod;
             return this;
         }
 
+        /// <inheritdoc/>
         public override AudioPlayer SetDelay(float delay) {
             externalDelay = delay;
             return this;
@@ -98,6 +142,8 @@ namespace Unknown.Manager.AudioManager {
         #region coroutines 
 
         private IEnumerator PlayRange(AudioSource source, AudioClip clip, UnknownAudioClip uAudioClip) {
+            yield return null;
+
             if(externalDelay != 0)
                 yield return CommonUtils.GetWaitForSeconds(externalDelay);
 

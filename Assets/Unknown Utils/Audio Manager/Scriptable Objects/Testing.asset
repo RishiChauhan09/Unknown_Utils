@@ -12,21 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817102e133a9f8f43bc06c93c3dadea6, type: 3}
   m_Name: Testing
   m_EditorClassIdentifier: Assembly-CSharp::Unknown.Manager.AudioManager.UnknownAudioConfig
-  <audioConfigName>k__BackingField: Testing
-  masterVolume: {x: 0.22, y: 0.6}
+  audioID:
+    id: Testing
+    audioType: 4
+  masterVolume: {x: 0.22, y: 0.96}
   pitch: {x: 0, y: 1}
   isLoop: 1
   randomFlags: 0
-  audioType: 4
-  clipSelectionStrategyType: 4
+  clipSelectionStrategyType: 2
   audioClips:
   - <audioClip>k__BackingField: {fileID: 8300000, guid: e97ced5b60506c44fa9885a8b5f88606, type: 3}
     <delay>k__BackingField: 0
     <volume>k__BackingField: 0.84
     <startPosition>k__BackingField: 0.35403717
     <endPosition>k__BackingField: 1
-  - <audioClip>k__BackingField: {fileID: 8300000, guid: 29cc9865dae6c1441b3a6885e694248c, type: 3}
+  - <audioClip>k__BackingField: {fileID: 0}
     <delay>k__BackingField: 0
     <volume>k__BackingField: 1
-    <startPosition>k__BackingField: 0.2826087
-    <endPosition>k__BackingField: 0.62422365
+    <startPosition>k__BackingField: 0
+    <endPosition>k__BackingField: 1
+  - <audioClip>k__BackingField: {fileID: 8300000, guid: 29cc9865dae6c1441b3a6885e694248c, type: 3}
+    <delay>k__BackingField: 0
+    <volume>k__BackingField: 0.45
+    <startPosition>k__BackingField: 0.17391309
+    <endPosition>k__BackingField: 0.63043475

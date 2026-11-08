@@ -8,6 +8,5 @@ namespace Unknown.Manager.AudioManager {
         Ambient = 1 << 2,
         Voice = 1 << 3,
         UI = 1 << 4,
-        Other = 1 << 5
     }
 }

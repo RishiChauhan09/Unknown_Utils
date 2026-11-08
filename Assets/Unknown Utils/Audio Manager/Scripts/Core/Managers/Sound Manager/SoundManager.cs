@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Unknown.Manager.AudioManager {
     public partial class SoundManager : MonoBehaviour {
@@ -16,9 +17,17 @@ namespace Unknown.Manager.AudioManager {
             }
         }
 
+        [Header("Sound Manager References")]
         [SerializeField] private AudioDatabase audioDatabase;
 
         #endregion
+
+        private void Awake() {
+            InitializePlayback();
+
+            DontDestroyOnLoad(gameObject);
+        }
+
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Init() {

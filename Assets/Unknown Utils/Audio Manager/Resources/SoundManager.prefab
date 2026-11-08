@@ -45,4 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unknown.Manager.AudioManager.SoundManager
   audioDatabase: {fileID: 11400000, guid: 490f4f5c592ab5b47afcdf6897aa6e86, type: 2}
-  audioSource: {fileID: 0}
+  audioPlayerPool:
+    prefab: {fileID: 8928335153642776015, guid: ca0b3c2d38796a240a37079b84d0feef, type: 3}
+    parent: {fileID: 7525315408787380003}

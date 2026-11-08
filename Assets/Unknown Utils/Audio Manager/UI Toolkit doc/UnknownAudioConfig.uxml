@@ -2,11 +2,11 @@
     <Style src="project://database/Assets/Unknown%20Utils/Audio%20Manager/USS/EditorUss.uss?fileID=7433441132597879392&amp;guid=8260b381bade7c3408a4340bf2b4ee9a&amp;type=3#EditorUss"/>
     <Style src="project://database/Assets/Unknown%20Utils/Audio%20Manager/USS/Override%20Default%20Uss.uss?fileID=7433441132597879392&amp;guid=1aa52c0a64b604d44860249e7a32f809&amp;type=3#Override Default Uss"/>
     <ui:VisualElement name="unknown-audio-config" style="flex-shrink: 0; justify-content: space-between;">
-        <ui:TextField label="" placeholder-text="Audio Config Name" name="AudioConfigName" binding-path="&lt;audioConfigName&gt;k__BackingField" style="margin-bottom: 7px; margin-top: 7px;"/>
+        <ui:TextField label="" placeholder-text="Audio Config Name" name="AudioConfigName" binding-path="audioID.id" tooltip="Audio name [Same as file name]" style="margin-bottom: 7px; margin-top: 7px;"/>
         <ui:VisualElement name="clipslection-playaudio" style="flex-grow: 1; flex-direction: row; margin-bottom: 7px;">
             <ui:EnumField label="" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="ClipSelection" binding-path="clipSelectionStrategyType" tooltip="Decides how the clip is selected to play." style="flex-grow: 1;"/>
-            <ui:EnumField label="" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="AudioType" binding-path="audioType" tooltip="Type of audio" style="width: 75px;"/>
-            <ui:Button text="Play Audio" name="PlayButton" style="flex-grow: 0.25;"/>
+            <ui:EnumField label="" value="None" name="AudioType" binding-path="audioID.audioType" tooltip="Type of audio" type="Unknown.Manager.AudioManager.AudioType, Assembly-CSharp" style="width: 75px;"/>
+            <ui:Button text="Play Audio" name="PlayButton" tooltip="Plays audio for testing" style="flex-grow: 0.25;"/>
         </ui:VisualElement>
         <ui:TabView name="main-tabview" style="flex-grow: 1; flex-shrink: 0; flex-direction: column; background-color: rgb(48, 48, 48); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; margin-left: 0; margin-right: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-bottom: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
             <ui:Tab label="Clips Settings" name="ClipsSettings" tooltip="For changing settings of single cilps" style="flex-grow: 1; flex-direction: column; flex-shrink: 0; width: 100%; margin-top: 10px; padding-top: 0; padding-right: 7px; padding-bottom: 7px; padding-left: 7px;">
