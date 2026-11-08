@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -41,3 +41,80 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: New Layer 1
+    uniqueID: 941533635
+    locked: 0
+  - name: New Layer 3
+    uniqueID: 3337687369
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 1996899459
+    locked: 0
+  - name: New Layer 5
+    uniqueID: 390116541
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 4182318311
+    locked: 0
+  - name: New Layer 7
+    uniqueID: 666666867
+    locked: 0
+  - name: New Layer 8
+    uniqueID: 1014408499
+    locked: 0
+  - name: New Layer 9
+    uniqueID: 3807328177
+    locked: 0
+  - name: New Layer 10
+    uniqueID: 3694259075
+    locked: 0
+  - name: New Layer 11
+    uniqueID: 219975569
+    locked: 0
+  - name: New Layer 12
+    uniqueID: 1184632831
+    locked: 0
+  - name: New Layer 13
+    uniqueID: 4138148717
+    locked: 0
+  - name: New Layer 14
+    uniqueID: 596115789
+    locked: 0
+  - name: New Layer 15
+    uniqueID: 2450010449
+    locked: 0
+  - name: New Layer 16
+    uniqueID: 3522959855
+    locked: 0
+  - name: New Layer 17
+    uniqueID: 4204872941
+    locked: 0
+  - name: New Layer 18
+    uniqueID: 810328233
+    locked: 0
+  - name: New Layer 19
+    uniqueID: 530505
+    locked: 0
+  - name: New Layer 20
+    uniqueID: 579743833
+    locked: 0
+  - name: New Layer 25
+    uniqueID: 3377692067
+    locked: 0
+  - name: New Layer 27
+    uniqueID: 1701434941
+    locked: 0
+  - name: New Layer 28
+    uniqueID: 3520966427
+    locked: 0
+  - name: New Layer 29
+    uniqueID: 3604201805
+    locked: 0
+  - name: New Layer 31
+    uniqueID: 1378404463
+    locked: 0
+  - name: New Layer 33
+    uniqueID: 1862672783
+    locked: 0
+  m_RenderingLayers:
+  - Default
