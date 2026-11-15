@@ -50,7 +50,7 @@ namespace Unknown.Manager.AudioManager {
         /// <inheritdoc/>
         public override AudioType GetAudioType() {
             if(audioConfig == null)
-                return AudioType.None;
+                return null;
 
             return audioConfig.GetAudioType();
         }

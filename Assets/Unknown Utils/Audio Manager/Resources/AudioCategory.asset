@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: AudioCategory
   m_EditorClassIdentifier: Assembly-CSharp::Unknown.Manager.AudioManager.AudioCategory
   categories:
+  - Default
   - SFX
   - UI
   - Ambient
   - Music
   - Voice
-  - 
   - 
   - 
   - 

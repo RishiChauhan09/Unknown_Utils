@@ -48,3 +48,4 @@ MonoBehaviour:
   audioPlayerPool:
     prefab: {fileID: 8928335153642776015, guid: ca0b3c2d38796a240a37079b84d0feef, type: 3}
     parent: {fileID: 7525315408787380003}
+  audioMixer: {fileID: 24100000, guid: 505aad4e79ff09d48b7707f63203ea06, type: 2}

@@ -449,6 +449,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce21c89355374e44695a01eb70ac05e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Testing
+  audioId:
+    id: Dance 26
+    groupName: Group 1
 --- !u!4 &706153451
 Transform:
   m_ObjectHideFlags: 0

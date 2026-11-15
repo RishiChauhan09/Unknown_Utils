@@ -1,9 +1,8 @@
 using UnityEngine;
+using Unknown.Manager.AudioManager;
 
 public class Testing : MonoBehaviour {
 
-    public void Test() { 
-        
-    }
+    [SerializeField] private AudioID audioId;
 
 }

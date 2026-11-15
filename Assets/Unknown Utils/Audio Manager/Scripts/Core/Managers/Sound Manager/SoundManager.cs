@@ -24,6 +24,8 @@ namespace Unknown.Manager.AudioManager {
 
         private void Awake() {
             InitializePlayback();
+            InitializeSoundManagerMasterSettings();
+            InitializeSoundManagerCategorySettings();
 
             DontDestroyOnLoad(gameObject);
         }

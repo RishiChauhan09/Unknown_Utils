@@ -12,6 +12,7 @@ namespace Unknown.Manager.AudioManager {
         [SerializeField] private Vector2 pitch;
         [SerializeField] private bool isLoop;
         [SerializeField] private RandomFlags randomFlags;
+        [SerializeField] private AudioType audioType;
 
         // clip selection settings variables
         [SerializeField] private ClipSelectionStrategy clipSelectionStrategyType;
@@ -81,7 +82,7 @@ namespace Unknown.Manager.AudioManager {
             clipSelectionStrategy.ResetSelectionStrategy();
         }
 
-        public AudioType GetAudioType() => audioID.audioType;
+        public AudioType GetAudioType() => audioType;
 
         public IAudioClip[] GetAudioClips() {
             if(cachedAudioClips == null) {
@@ -125,11 +126,12 @@ namespace Unknown.Manager.AudioManager {
 
         public class NameOf {
             public static string AudioConfigName = nameof(audioID) + "." + nameof(audioID.id);
+            public static string AudioGroupName = nameof(audioID) + "." + nameof(audioID.groupName);
             public static string MasterVolume = nameof(masterVolume);
             public static string Pitch = nameof(pitch);
             public static string IsLoop = nameof(isLoop);
             public static string RandomFlags = nameof(randomFlags);
-            public static string AudioType = nameof(audioID) + "." + nameof(audioID.audioType);
+            public static string AudioType = nameof(audioType);
             public static string ClipSelectionStrategyType = nameof(clipSelectionStrategyType);
             public static string AudioClips = nameof(audioClips);
         }

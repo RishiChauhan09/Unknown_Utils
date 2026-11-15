@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Unknown.Manager.AudioManager {
 
@@ -7,19 +8,20 @@ namespace Unknown.Manager.AudioManager {
 
         [Header("Playback Settings")]
         [SerializeField] private ObjectPool<AudioPlayer> audioPlayerPool;
+        [SerializeField] private AudioMixer audioMixer;
 
         // non serialized private variables 
         private Dictionary<AudioID, UnknownAudioConfig> audioConfigDict;
 
         // runtime audio playing info
         private Dictionary<AudioID, HashSet<AudioPlayer>> runtimeAudioPlayingAccID = new();
-        private Dictionary<AudioType, HashSet<AudioPlayer>> currentAudioPlayingAccType = new();
+        private Dictionary<string, HashSet<AudioPlayer>> currentAudioPlayingAccType = new();
 
         private void InitializePlayback() {
             // initialzing
             audioConfigDict = new();
 
-            foreach(UnknownAudioConfig audioConfig in audioDatabase.audioConfigs) {
+            foreach(UnknownAudioConfig audioConfig in audioDatabase.GetAudioConfigs()) {
                 if(audioConfigDict.ContainsKey(audioConfig.GetAudioID())) {
                     Debug.LogError("Same audio config with type and id");
                     continue;
@@ -65,11 +67,11 @@ namespace Unknown.Manager.AudioManager {
                 player.Stop();
         }
 
-        public void Stop(AudioType auidoType) {
-            if(!currentAudioPlayingAccType.ContainsKey(auidoType))
+        public void Stop(AudioType audioType) {
+            if(!currentAudioPlayingAccType.ContainsKey(audioType.audioTypeName))
                 return;
 
-            foreach(AudioPlayer player in currentAudioPlayingAccType[auidoType])
+            foreach(AudioPlayer player in currentAudioPlayingAccType[audioType.audioTypeName])
                 player.Stop();
         }
 
@@ -93,11 +95,11 @@ namespace Unknown.Manager.AudioManager {
                 player.Pause();
         }
 
-        public void Pause(AudioType auidoType) {
-            if(!currentAudioPlayingAccType.ContainsKey(auidoType))
+        public void Pause(AudioType audioType) {
+            if(!currentAudioPlayingAccType.ContainsKey(audioType.audioTypeName))
                 return;
 
-            foreach(AudioPlayer player in currentAudioPlayingAccType[auidoType])
+            foreach(AudioPlayer player in currentAudioPlayingAccType[audioType.audioTypeName])
                 player.Pause();
         }
 
@@ -121,11 +123,11 @@ namespace Unknown.Manager.AudioManager {
                 player.Resume();
         }
 
-        public void Resume(AudioType auidoType) {
-            if(!currentAudioPlayingAccType.ContainsKey(auidoType))
+        public void Resume(AudioType audioType) {
+            if(!currentAudioPlayingAccType.ContainsKey(audioType.audioTypeName))
                 return;
 
-            foreach(AudioPlayer player in currentAudioPlayingAccType[auidoType])
+            foreach(AudioPlayer player in currentAudioPlayingAccType[audioType.audioTypeName])
                 player.Resume();
         }
 
@@ -144,20 +146,22 @@ namespace Unknown.Manager.AudioManager {
         #region private methods 
 
         private void AddToRuntime(AudioID audioID, AudioPlayer audioPlayer) {
+            // according to audio id
             if(!runtimeAudioPlayingAccID.ContainsKey(audioID)) {
                 runtimeAudioPlayingAccID[audioID] = new();
             }
             runtimeAudioPlayingAccID[audioID].Add(audioPlayer);
 
-            if(!currentAudioPlayingAccType.ContainsKey(audioID.audioType)) {
-                currentAudioPlayingAccType[audioID.audioType] = new();
+            // according to audio type
+            if(!currentAudioPlayingAccType.ContainsKey(audioPlayer.GetAudioConfig().GetAudioType().audioTypeName)) {
+                currentAudioPlayingAccType[audioPlayer.GetAudioConfig().GetAudioType().audioTypeName] = new();
             }
-            currentAudioPlayingAccType[audioID.audioType].Add(audioPlayer);
+            currentAudioPlayingAccType[audioPlayer.GetAudioConfig().GetAudioType().audioTypeName].Add(audioPlayer);
         }
 
         private void RemoveFromRuntime(AudioID audioID, AudioPlayer audioPlayer) {
             runtimeAudioPlayingAccID[audioID].Remove(audioPlayer);
-            currentAudioPlayingAccType[audioID.audioType].Remove(audioPlayer);
+            currentAudioPlayingAccType[audioPlayer.GetAudioConfig().GetAudioType().audioTypeName].Remove(audioPlayer);
         }
 
         #endregion

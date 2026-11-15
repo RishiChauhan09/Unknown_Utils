@@ -1,3 +1,5 @@
+using Codice.Client.Common.GameUI;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -13,7 +15,10 @@ namespace Unknown.Manager.AudioManager {
         // private variables
         private SerializedProperty audioClipsListProperty;
 
-        // const fields 
+        // audio config things
+        private const string AUDIO_GROUP_NAME = "GroupName";
+
+        // const fields audio clips 
         private const string START_POS = "clipStartPos";
         private const string END_POS = "clipEndPos";
         private const string DELAY = "clipDelay";
@@ -34,6 +39,7 @@ namespace Unknown.Manager.AudioManager {
         private const string END_POS_IMAGE = "endPosImage";
 
         // ui fields 
+        private DropdownField groupNameFieldDD;
         private ListView clipsListView;
         private FloatField startPosField;
         private FloatField endPosField;
@@ -57,6 +63,7 @@ namespace Unknown.Manager.AudioManager {
             audioClipsListProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.AudioClips);
 
             // ============== getting all fields ==============
+            groupNameFieldDD = root.Q<DropdownField>(AUDIO_GROUP_NAME);
             startPosField = root.Q<FloatField>(START_POS);
             endPosField = root.Q<FloatField>(END_POS);
             delayField = root.Q<FloatField>(DELAY);
@@ -73,6 +80,9 @@ namespace Unknown.Manager.AudioManager {
             ToolbarToggle pitchRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_PITCH);
             Slider pitchSlider = root.Q<Slider>(PITCH_SLIDER);
             VisualElement pitchMinMaxSlider = root.Q<VisualElement>(PITCH_SLIDER_MINMAX);
+
+            // ============== Updating Things ==============
+            UpdateGroupDropDown();
 
             // ============== events ==============
             clipsListView.selectionChanged += _ => RefreshFields();
@@ -103,7 +113,7 @@ namespace Unknown.Manager.AudioManager {
             return root;
         }
 
-        #region list methods 
+        #region List methods 
 
         private void RefreshFields() {
             int index = clipsListView.selectedIndex;
@@ -211,7 +221,7 @@ namespace Unknown.Manager.AudioManager {
 
         #endregion
 
-        #region updating methods 
+        #region Updating methods 
 
         private void UpdateGUIForRandom(ToolbarToggle rndToggle, Slider slider, VisualElement minMaxSlider) {
             if(rndToggle.value) {
@@ -230,6 +240,31 @@ namespace Unknown.Manager.AudioManager {
 
             startPosImage.style.right = Length.Percent(100f - (startPos * 100f));
             endPosImage.style.left = Length.Percent(endPos * 100f);
+        }
+
+        private void UpdateGroupDropDown() {
+            AudioDatabase database = Resources.Load(nameof(AudioDatabase)) as AudioDatabase;
+
+            List<string> groupsName = database.GetGroupsName();
+            groupNameFieldDD.choices = groupsName;
+
+            string currentGroupID = serializedObject.FindProperty(UnknownAudioConfig.NameOf.AudioGroupName).stringValue;
+            UnknownAudioConfig audioConfig = serializedObject.targetObject as UnknownAudioConfig;
+
+            groupNameFieldDD.RegisterValueChangedCallback((evt) => {
+                UnknownAudioGroup group = database.GetGroup(currentGroupID);
+
+                if(group != null)
+                    group.RemoveConfig(audioConfig.GetAudioID().id);
+
+                string newGroupName = evt.newValue;
+                UnknownAudioGroup newGroup = database.GetGroup(newGroupName);
+
+                if(newGroup != null)
+                    newGroup.AddConfig(audioConfig);
+
+                AssetDatabase.SaveAssets();
+            });
         }
 
         #endregion

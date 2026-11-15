@@ -6,9 +6,9 @@ namespace Unknown.Manager.AudioManager {
     public class AudioID : IEquatable<AudioID> {
 
         public string id;
-        public AudioType audioType;
+        public string groupName;
 
-        public string Value => audioType.ToString() + id;
+        public string Value => groupName + id;
 
         public bool Equals(AudioID other) {
             return Value == other.Value;
@@ -26,6 +26,13 @@ namespace Unknown.Manager.AudioManager {
         public static bool operator !=(AudioID a, AudioID b) => !a.Equals(b);
 
         public override string ToString() => Value;
+
+
+        public static class NameOf {
+            public static string ID = nameof(id);
+            public static string GroupName = nameof(groupName);
+        }
+
 
     }
 }
