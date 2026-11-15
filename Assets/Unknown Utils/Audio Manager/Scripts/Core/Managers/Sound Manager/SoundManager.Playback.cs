@@ -43,6 +43,9 @@ namespace Unknown.Manager.AudioManager {
             // getting audio from pool
             AudioPlayer audioPlayer = audioPlayerPool.Get();
 
+            // setting mixer group
+            audioPlayer.GetAudioSource().outputAudioMixerGroup = GetMixer(audioConfig.GetAudioType().audioTypeName);
+
             // adding to current playing audioplayers
             AddToRuntime(audioID, audioPlayer);
 

@@ -341,6 +341,24 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: -2656383359502647839}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!244 &-6168448484378284077
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 74f5b05ac5b5a4547ad561e787da67fb
+  m_EffectName: Lowpass
+  m_MixLevel: b5fa0aca76c70f14784ca0d1aa14b3d9
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: 69c8ebba280c9824e9aa9c2be9226c75
+  - m_ParameterName: Resonance
+    m_GUID: f675086d6a3410244b779a1cc01b3621
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &-5741600480168098579
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -593,6 +611,8 @@ AudioMixerGroupController:
   m_Effects:
   - {fileID: -2656383359502647839}
   - {fileID: 7262188723391907249}
+  - {fileID: -6168448484378284077}
+  - {fileID: -114445645778318379}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
@@ -834,6 +854,24 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!244 &-114445645778318379
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: cc1956d02511b3640aaf5b1015b72a83
+  m_EffectName: Highpass
+  m_MixLevel: 567b1e50ba6aacd46a9ce2543ae9a030
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: 74256e747e28cb8478e70aa483fb1951
+  - m_ParameterName: Resonance
+    m_GUID: cf355831826d79e41911d60b2fd14edd
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-106239681344136292
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -893,6 +931,10 @@ AudioMixerController:
     name: Dominator4Vol
   - guid: a3c7b5dc6749ff84e92613620c9d3b79
     name: EffectVol
+  - guid: 74256e747e28cb8478e70aa483fb1951
+    name: Highpass
+  - guid: 69c8ebba280c9824e9aa9c2be9226c75
+    name: Lowpass
   - guid: 72c1dc6d47a5ea34ebe15172c696d36f
     name: MasterVol
   - guid: 557ea8fe60390934599c7ea5db973073
@@ -1009,7 +1051,7 @@ AudioMixerController:
     - 048a6df43059be041b6b9c51b3c71b8f
     - e2a74167987ab9b4f83ed32b6947c7d1
     name: Without Types
-  m_CurrentViewIndex: 1
+  m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
 --- !u!243 &24300002
 AudioMixerGroupController:
@@ -1059,6 +1101,14 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 014c9655cc361d147967875bdf681068
   m_FloatValues:
+    cb81a5b2609e36a43a1a76b7ba924639: 0.01
+    6efc5f043f5749e48989e1dea519261b: 0
+    74256e747e28cb8478e70aa483fb1951: 10
+    69c8ebba280c9824e9aa9c2be9226c75: 22000
+    070d760b9f40a2f478eb87e34580b2e1: 0
+    4fd79f0ceb9e81d438866b9fdd744108: 0
+    a3c7b5dc6749ff84e92613620c9d3b79: 0
+    f675086d6a3410244b779a1cc01b3621: 1
     72c1dc6d47a5ea34ebe15172c696d36f: 0
   m_TransitionOverrides: {}
 --- !u!244 &32376785305765566

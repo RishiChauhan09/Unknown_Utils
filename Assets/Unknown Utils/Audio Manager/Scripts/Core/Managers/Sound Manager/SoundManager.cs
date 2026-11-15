@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Unknown.Manager.AudioManager {
     public partial class SoundManager : MonoBehaviour {
@@ -26,6 +25,7 @@ namespace Unknown.Manager.AudioManager {
             InitializePlayback();
             InitializeSoundManagerMasterSettings();
             InitializeSoundManagerCategorySettings();
+            InitializeSoundManagerEffects();
 
             DontDestroyOnLoad(gameObject);
         }

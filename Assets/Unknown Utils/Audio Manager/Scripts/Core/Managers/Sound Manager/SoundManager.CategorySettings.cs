@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Unknown.Manager.AudioManager {
 
@@ -11,6 +12,7 @@ namespace Unknown.Manager.AudioManager {
             public string volumeAudioString;        // string for audio mixer
             public bool isMuted;                    // true & false
             public float previousValue;             // value from 0 - 1
+            public AudioMixerGroup mixerGroup;
         }
 
         private Dictionary<string, AudioTypeValues> audioTypesVolumeStringLookup = new();
@@ -42,6 +44,12 @@ namespace Unknown.Manager.AudioManager {
                     isMuted = false,
                     previousValue = 1f
                 };
+
+                AudioMixerGroup[] groups = audioMixer.FindMatchingGroups(UnknownNames.Type + i.ToString());
+
+                if(groups.Length > 0) {
+                    audioTypeValues.mixerGroup = groups[0];
+                }
 
                 allValidAudioTypes.Add(AudioType.NameToAudioType(audioType));
                 audioTypesVolumeStringLookup[audioType] = audioTypeValues;
@@ -195,7 +203,16 @@ namespace Unknown.Manager.AudioManager {
 
         #endregion
 
+        #region Helper Methods
 
+        private AudioMixerGroup GetMixer(string audioType) {
+            if(!audioTypesVolumeStringLookup.ContainsKey(audioType)) 
+                return null;
+
+            return audioTypesVolumeStringLookup[audioType].mixerGroup;
+        }
+
+        #endregion
 
     }
 }
