@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33aea51bf413e714ab1d8736db25ce0f, type: 3}
   m_Name: AudioDatabase
   m_EditorClassIdentifier: Assembly-CSharp::Unknown.Manager.AudioManager.AudioDatabase
-  audioGroups:
-  - {fileID: 11400000, guid: 56ceba219f68de14697474821fe2527a, type: 2}
-  - {fileID: 11400000, guid: c41ac8e6ab510cd4b8e08f873e7df2b3, type: 2}
+  audioGroups: []

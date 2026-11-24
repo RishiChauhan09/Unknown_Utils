@@ -51,14 +51,14 @@ namespace Unknown.Manager.AudioManager {
                     audioTypeValues.mixerGroup = groups[0];
                 }
 
-                allValidAudioTypes.Add(AudioType.NameToAudioType(audioType));
+                allValidAudioTypes.Add(AudioTypeMask.NameToAudioType(audioType));
                 audioTypesVolumeStringLookup[audioType] = audioTypeValues;
             }
         }
 
-        #region Audio Type 
+        #region Audio Type
 
-        #region Public Methods 
+        #region Public Methods for string input
 
         /// <summary>
         /// Sets the volume of an audio type (0-1).

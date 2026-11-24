@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Unknown.Manager.AudioManager {
 
-    [CreateAssetMenu(fileName = "AudioConfig", menuName = "Unknown/Audio Manager/AudioConfig")]
+    [CreateAssetMenu(fileName = "Audio Config", menuName = "Unknown/Audio Manager/Audio Config")]
     public class UnknownAudioConfig : ScriptableObject, IAudioConfig {
 
         [SerializeField] private AudioID audioID;
@@ -11,6 +11,7 @@ namespace Unknown.Manager.AudioManager {
         [SerializeField] private Vector2 masterVolume;
         [SerializeField] private Vector2 pitch;
         [SerializeField] private bool isLoop;
+        [SerializeField] private bool loopSameAudio;
         [SerializeField] private RandomFlags randomFlags;
         [SerializeField] private AudioType audioType;
 
@@ -19,6 +20,7 @@ namespace Unknown.Manager.AudioManager {
 
         // audio clips settings variables
         [SerializeField] private UnknownAudioClip[] audioClips;
+        [SerializeField] private Audio3DSettings audio3dSettings;
 
         // private variables
         private IAudioClip[] cachedAudioClips;
@@ -34,7 +36,6 @@ namespace Unknown.Manager.AudioManager {
                 if(ac == null)
                     continue;
 
-                ac.delay = Mathf.Max(0f, ac.delay);
                 ac.volume = Mathf.Clamp01(ac.volume);
 
                 ac.startPosition = Mathf.Clamp01(ac.startPosition);
@@ -48,7 +49,7 @@ namespace Unknown.Manager.AudioManager {
         #region interface methods 
 
         public float GetMasterVolume() {
-            if(randomFlags == RandomFlags.Volume) {
+            if((randomFlags & RandomFlags.Volume) > 0) {
                 return UnityEngine.Random.Range(masterVolume.x, masterVolume.y);
             } else {
                 return masterVolume.y;
@@ -56,7 +57,7 @@ namespace Unknown.Manager.AudioManager {
         }
 
         public float GetPitch() {
-            if(randomFlags == RandomFlags.Pitch) {
+            if((randomFlags & RandomFlags.Pitch) > 0) {
                 return UnityEngine.Random.Range(pitch.x, pitch.y);
             } else {
                 return pitch.y;
@@ -64,6 +65,8 @@ namespace Unknown.Manager.AudioManager {
         }
 
         public bool IsLooped() => isLoop;
+
+        public bool IsSameAudioLooped() => loopSameAudio;
 
         public UnknownAudioClip PickNewClip() {
             switch(clipSelectionStrategyType) {
@@ -75,7 +78,27 @@ namespace Unknown.Manager.AudioManager {
             }
 
             clipSelectionStrategy.PickAudio(GetAudioClips(), out int index);
-            return index >= 0 && index < audioClips.Length ? audioClips[index] : null;
+
+            UnknownAudioClip audioClip = index >= 0 && index < audioClips.Length ? audioClips[index] : null;
+            if(audioClip == null) {
+                Debug.LogWarning("Audio clip is null " + index);
+            }
+            return audioClip;
+        }
+
+        public UnknownAudioClip PickNewClip(out int index) {
+            switch(clipSelectionStrategyType) {
+                case ClipSelectionStrategy.Single: EnsureClipSelectionStrategy<SingleClipSelection>(); break;
+                case ClipSelectionStrategy.Random: EnsureClipSelectionStrategy<RandomClipSelection>(); break;
+                case ClipSelectionStrategy.Shuffle: EnsureClipSelectionStrategy<ShuffleClipSelection>(); break;
+                case ClipSelectionStrategy.Sequence: EnsureClipSelectionStrategy<SequenceClipSelection>(); break;
+                case ClipSelectionStrategy.PingPong: EnsureClipSelectionStrategy<PingPongClipSelection>(); break;
+            }
+
+            clipSelectionStrategy.PickAudio(GetAudioClips(), out index);
+
+            UnknownAudioClip audioClip = index >= 0 && index < audioClips.Length ? audioClips[index] : null;
+            return audioClip;
         }
 
         public void ResetClipSelectionStrategy() {
@@ -98,6 +121,10 @@ namespace Unknown.Manager.AudioManager {
 
         public AudioID GetAudioID() {
             return audioID;
+        }
+
+        public Audio3DSettings GetAudio3DSettings() {
+            return audio3dSettings;
         }
 
         #endregion
@@ -134,6 +161,7 @@ namespace Unknown.Manager.AudioManager {
             public static string AudioType = nameof(audioType);
             public static string ClipSelectionStrategyType = nameof(clipSelectionStrategyType);
             public static string AudioClips = nameof(audioClips);
+            public static string Audio3DSettings = nameof(audio3dSettings);
         }
 
     }

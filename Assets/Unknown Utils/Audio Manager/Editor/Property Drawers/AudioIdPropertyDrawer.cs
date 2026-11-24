@@ -115,6 +115,7 @@ namespace Unknown.Manager.AudioManager {
             root.style.justifyContent = Justify.SpaceBetween;
             root.style.alignItems = Align.Center;
             root.style.minHeight = 22;
+            root.style.marginLeft = 3f;
 
             SerializedProperty idProperty = property.FindPropertyRelative(AudioID.NameOf.ID);
 
@@ -123,7 +124,7 @@ namespace Unknown.Manager.AudioManager {
             Label label = new Label(property.displayName);
 
             label.tooltip = property.propertyPath;
-            label.style.width = Length.Percent(40);
+            label.style.width = Length.Percent(35);
             label.style.unityTextAlign = TextAnchor.MiddleLeft;
             label.style.overflow = Overflow.Hidden;
             label.style.textOverflow = TextOverflow.Ellipsis;
@@ -135,7 +136,7 @@ namespace Unknown.Manager.AudioManager {
             AudioPickerStyle.MakeFlat(selectButton, AudioPickerStyle.FieldBackground, AudioPickerStyle.FieldHover, true, AudioPickerStyle.Border);
             AudioPickerStyle.SetBorder(selectButton, 1, AudioPickerStyle.Border);
             AudioPickerStyle.SetPadding(selectButton, 2, 8);
-            selectButton.style.width = Length.Percent(60);
+            selectButton.style.width = Length.Percent(62.5f);
             selectButton.style.height = 20;
             selectButton.style.justifyContent = Justify.SpaceBetween;
 
@@ -228,7 +229,7 @@ namespace Unknown.Manager.AudioManager {
 
             window.titleContent = new GUIContent("Select Audio");
 
-            window.ShowAsDropDown(position, new Vector2(300, 350));
+            window.ShowAsDropDown(position, new Vector2(200, 250));
 
             return window;
         }

@@ -1,0 +1,35 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Unknown%20Utils/Audio%20Manager/USS/Audio3DSettings.uss?fileID=7433441132597879392&amp;guid=ba8c5010b5f73a945897fb5a704fd7ed&amp;type=3#Audio3DSettings"/>
+    <ui:VisualElement style="flex-grow: 0; flex-shrink: 0;">
+        <ui:VisualElement name="SpartialBlendParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+            <ui:Label text="Spartial Blend" name="" style="margin-right: 0; width: 40%;"/>
+            <ui:Slider label="" value="0" high-value="1" tooltip="Decides what space audio will be in | 0-&gt; 2D | 1 -&gt; 3D" show-input-field="true" name="SpartialBlendSlider" binding-path="spartialBlend" style="flex-grow: 1;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="ReverbZoneMixParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+            <ui:Label text="Reverb Zone Mix" name="" style="margin-right: 0; width: 40%;"/>
+            <ui:Slider label="" value="1" high-value="1.1" tooltip="Decides how much audio will be passed whiel Reverb effect is applied." show-input-field="true" name="ReverbZoneMixSlider" binding-path="reverbZoneMix" style="flex-grow: 1;"/>
+        </ui:VisualElement>
+        <ui:Foldout text="3D Settings">
+            <ui:VisualElement name="DopperLevelParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label text="Dopper Level" name="" style="margin-right: 0; width: 40%;"/>
+                <ui:Slider label="" value="1" high-value="5" tooltip="Dopper level of this audio." show-input-field="true" name="DopperLevelSlider" binding-path="dopperLevel" style="flex-grow: 1;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="SpreadParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label text="Spread" name="" style="margin-right: 0; width: 40%;"/>
+                <ui:Slider label="" value="0" high-value="360" tooltip="Spread for this audio." show-input-field="true" name="SpreadSlider" binding-path="spread" style="flex-grow: 1;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="RolloffModeParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label text="Volume Rolloff" name="" style="margin-right: 0; width: 40%;"/>
+                <ui:EnumField label="" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" binding-path="volumeRolloff" name="RolloffModeEnum" tooltip="Volume Rolloff Mode" style="flex-grow: 1;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="MinDistanceParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label text="Min Distance" name="" style="margin-right: 0; width: 40%;"/>
+                <ui:FloatField label="" value="5" binding-path="minDistance" name="MinDistanceFloatField" tooltip="Min Distance" style="flex-grow: 1;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="MaxDistanceParent" class="InfosParent" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label text="Max Distance" name="" style="margin-right: 0; width: 40%;"/>
+                <ui:FloatField label="" value="5" binding-path="maxDistance" name="MaxDistanceFloatField" tooltip="Max Distance" style="flex-grow: 1;"/>
+            </ui:VisualElement>
+        </ui:Foldout>
+    </ui:VisualElement>
+</ui:UXML>

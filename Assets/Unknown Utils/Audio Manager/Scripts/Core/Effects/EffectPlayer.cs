@@ -11,12 +11,12 @@ namespace Unknown.Manager.AudioManager {
         }
 
         public IEffectPlayer HighpassOthers(float highPassValue) {
-            soundManager.HighPassEffect(highPassValue);
+            soundManager.HighpassEffects(highPassValue);
             return this;
         }
 
         public IEffectPlayer LowPassOthers(float lowpassValue) {
-            soundManager.LowPassEffect(lowpassValue);
+            soundManager.LowPassEffects(lowpassValue);
             return this;
         }
 

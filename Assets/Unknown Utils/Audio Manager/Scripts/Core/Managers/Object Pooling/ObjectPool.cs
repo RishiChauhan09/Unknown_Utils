@@ -16,6 +16,8 @@ namespace Unknown.Manager.AudioManager {
 
         private Func<T> createObjectFunc;
 
+        private Action<T> OnObjectCreateMethod;
+
         public ObjectPool(Func<T> createObjectFunc = null, int initializeObjectsNumber = 0) {
             this.createObjectFunc = createObjectFunc;
             Initialize(initializeObjectsNumber);
@@ -69,6 +71,10 @@ namespace Unknown.Manager.AudioManager {
             }
         }
 
+        public void SetMethodAfterCreate(Action<T> method) {
+            OnObjectCreateMethod = method;
+        }
+
         #region private method 
 
         private T CreateObject() {
@@ -77,6 +83,7 @@ namespace Unknown.Manager.AudioManager {
             }
 
             T newObj = UnityEngine.Object.Instantiate(prefab, parent);
+            OnObjectCreateMethod?.Invoke(newObj);
             allPoolObject.Add(newObj);
             return newObj;
         }

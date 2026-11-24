@@ -18,7 +18,11 @@ namespace Unknown.Manager.AudioManager {
         private Dictionary<string, HashSet<AudioPlayer>> currentAudioPlayingAccType = new();
 
         private void InitializePlayback() {
-            // initialzing
+            audioPlayerPool.SetMethodAfterCreate((audioPlayer) => {
+                audioPlayer.SetDefaultParent(transform);
+            });
+
+            // dict 
             audioConfigDict = new();
 
             foreach(UnknownAudioConfig audioConfig in audioDatabase.GetAudioConfigs()) {
@@ -33,11 +37,11 @@ namespace Unknown.Manager.AudioManager {
 
         #region playing methods 
 
-        public void Play(AudioID audioID, float delay = 0) {
+        public AudioPlayer Play(AudioID audioID, float delay = 0) {
             if(!audioConfigDict.TryGetValue(audioID, out UnknownAudioConfig audioConfig)) {
-                Debug.Log("Error finding audio config for : " + audioID + 
+                Debug.Log("Error finding audio config for : " + audioID +
                     "\nTry referesing database : Tools > Unknown Utils > Audio Manager > Refresh database");
-                return;
+                return null;
             }
 
             // getting audio from pool
@@ -46,14 +50,62 @@ namespace Unknown.Manager.AudioManager {
             // setting mixer group
             audioPlayer.GetAudioSource().outputAudioMixerGroup = GetMixer(audioConfig.GetAudioType().audioTypeName);
 
+            audioPlayer.SetupAudio3DSettings(audioConfig.GetAudio3DSettings());
+
+            if(audioConfig.IsLooped()) {
+                audioPlayer.SetAudioConfig(audioConfig).SetDelay(delay).Play().OnLoopStep(() => {
+                    if(audioConfig.IsSameAudioLooped()) {
+                        audioPlayer.Restart();
+
+                    } else {
+                        Play(audioID);
+                    }
+
+                }).OnAudioEnded(() => {                 // this is when audio is stopped manually
+                    audioPlayerPool.Release(audioPlayer);
+
+                    RemoveFromRuntime(audioID, audioPlayer);
+                });
+
+            } else {
+                audioPlayer.SetAudioConfig(audioConfig).SetDelay(delay).Play().OnAudioEnded(() => {
+                    audioPlayerPool.Release(audioPlayer);
+
+                    RemoveFromRuntime(audioID, audioPlayer);
+                });
+            }
+
             // adding to current playing audioplayers
             AddToRuntime(audioID, audioPlayer);
 
-            audioPlayer.SetAudioConfig(audioConfig).SetDelay(delay).Play().OnAudioEnded(() => {
-                audioPlayerPool.Release(audioPlayer);
+            return audioPlayer;
+        }
 
-                RemoveFromRuntime(audioID, audioPlayer);
-            });
+        public AudioPlayer Play(AudioID audioID, Vector3 position, float delay = 0) {
+            AudioPlayer audioPlayer = Play(audioID, delay);
+            audioPlayer.transform.position = position;
+            return audioPlayer;
+        }
+
+        public AudioPlayer Play(AudioClip audioClip, AudioParameter audioparameter = null) {
+            if(audioparameter == null)
+                audioparameter = new();
+
+            AudioPlayer audioPlayer = audioPlayerPool.Get();
+
+            AudioSource audioSource = audioPlayer.GetAudioSource();
+            audioSource.volume = audioparameter.volume;
+            audioSource.pitch = audioparameter.pitch;
+
+            audioPlayer.SetDelay(audioparameter.delay)
+                .Play(audioClip, audioparameter.normalizedStartPos, audioparameter.normalizedEndPos)
+                .OnAudioEnded(() => {
+                    audioPlayerPool.Release(audioPlayer);       // just release bcoz there is no audio id assigned to it 
+                });
+
+            // here there is no need to add to runtime bcoz it does not have any type or audio id
+
+            return audioPlayer;
         }
 
         #endregion
@@ -106,7 +158,7 @@ namespace Unknown.Manager.AudioManager {
                 player.Pause();
         }
 
-        public void PasueAll() {
+        public void PauseAll() {
             foreach(var kvp in currentAudioPlayingAccType) {
                 foreach(AudioPlayer player in kvp.Value) {
                     player.Pause();

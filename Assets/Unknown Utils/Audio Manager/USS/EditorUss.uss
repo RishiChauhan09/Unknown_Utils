@@ -2,17 +2,17 @@
 }
 
 .toolbar-toggle {
-    background-color: rgb(43, 43, 43);
+    background-color: rgb(78, 78, 78);
     -unity-text-align: middle-left;
     -unity-text-outline-width: 0;
 }
 
 .toolbar-toggle:hover {
-    background-color: rgb(89, 89, 89);
+    background-color: rgb(105, 105, 105);
 }
 
 .toolbar-toggle:checked {
-    background-color: rgb(103, 103, 103);
+    background-color: rgb(70, 96, 124);
     transition-duration: 0.1s;
 }
 
@@ -22,6 +22,9 @@
 }
 
 .tab-button {
+}
+
+.toolbar-toggle-1 {
 }
 
 #unknown-audio-config > #main-tabview > #ClipsSettings > VisualElement > #trimSlider > .unity-min-max-slider__input > #unity-dragger {

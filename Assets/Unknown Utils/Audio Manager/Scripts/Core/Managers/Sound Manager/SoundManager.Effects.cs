@@ -6,12 +6,6 @@ namespace Unknown.Manager.AudioManager {
 
     public partial class SoundManager : MonoBehaviour {
 
-        // constants 
-        private const float DEFAULT_LOWPASS = 22000f;
-        private const float DEFAULT_HIGHPASS = 10f;
-        private const float DEFAULT_VOLUME = 0f;
-
-
         // audio mixer paramters strings
         private const string HIGH_PASS_EFFCT = "Highpass";
         private const string LOW_PASS_EFFCT = "Lowpass";
@@ -44,6 +38,7 @@ namespace Unknown.Manager.AudioManager {
         /// <summary>
         /// Plays audio player as dominator
         /// </summary>
+        /// Note : this is used by audio player as extension method
         public IEffectPlayer AsDominator(AudioPlayer audioPlayer) {
             if(dominatorsQueue.Count <= 0)
                 return effectPlayer;
@@ -54,6 +49,7 @@ namespace Unknown.Manager.AudioManager {
 
             audioPlayer.onAudioEnded += () => {
                 ResetEffects();
+                audioPlayer.GetAudioSource().outputAudioMixerGroup = null;
                 dominatorsQueue.Enqueue(dominatorGrp);
             };
 
@@ -63,20 +59,23 @@ namespace Unknown.Manager.AudioManager {
         /// <summary>
         /// Low pass effect
         /// </summary>
-        public void LowPassEffect(float lowPassValue) {
+        /// Note : This us used by effect player object
+        public void LowPassEffects(float lowPassValue) {
             audioMixer.SetFloat(LOW_PASS_EFFCT, lowPassValue);
         }
 
         /// <summary>
         /// Highpass effect
         /// </summary>
-        public void HighPassEffect(float highPassValue) {
+        /// Note : This us used by effect player object
+        public void HighpassEffects(float highPassValue) {
             audioMixer.SetFloat(HIGH_PASS_EFFCT, highPassValue);
         }
 
         /// <summary>
         /// Takes value from 0 - 1
         /// </summary>
+        /// Note : This us used by effect player object
         public void SetEffectsVolume(float volume) {
             float volumeDB = volume <= 0f ? MinVolumeDB : Mathf.Log10(volume) * 20f;
 
@@ -86,10 +85,11 @@ namespace Unknown.Manager.AudioManager {
         /// <summary>
         /// Resets the effects applied in effects
         /// </summary>
+        /// Automatically reset after the audio is compelted which was playing as dominator
         public void ResetEffects() {
-            audioMixer.SetFloat(HIGH_PASS_EFFCT, DEFAULT_HIGHPASS);
-            audioMixer.SetFloat(LOW_PASS_EFFCT, DEFAULT_LOWPASS);
-            audioMixer.SetFloat(EFFECTS_VOL, DEFAULT_VOLUME);
+            audioMixer.SetFloat(HIGH_PASS_EFFCT, UnknownConstants.DefaultHighpass);
+            audioMixer.SetFloat(LOW_PASS_EFFCT, UnknownConstants.DefaultLowpass);
+            audioMixer.SetFloat(EFFECTS_VOL, UnknownConstants.FullDecibelVolume);
         }
 
         #endregion

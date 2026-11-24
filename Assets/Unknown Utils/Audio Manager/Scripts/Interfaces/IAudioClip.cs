@@ -4,7 +4,6 @@ namespace Unknown.Manager.AudioManager {
 
     public interface IAudioClip {
 
-        public float delay { get; set; }
         public float volume { get; set; }
 
         public float startPosition { get; set; }

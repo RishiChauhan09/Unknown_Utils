@@ -41,6 +41,7 @@ namespace Unknown.Manager.AudioManager {
             }
 
             var instance = Instantiate(prefab);
+            instance.name = "[Unknown Sound Manager]";
             _instance = instance.GetComponent<SoundManager>();
         }
 

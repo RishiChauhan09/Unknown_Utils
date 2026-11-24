@@ -1,9 +1,12 @@
+
 using System;
 using UnityEngine;
 
 namespace Unknown.Manager.AudioManager {
 
     public abstract class AudioPlayer : MonoBehaviour {
+
+        public bool IsLooped { get; protected set; }
 
         #region abstract methods 
 
@@ -48,6 +51,16 @@ namespace Unknown.Manager.AudioManager {
         /// </summary>
         public abstract void Resume();
 
+        /// <summary>
+        /// Sets up audio 3d settings in audio source
+        /// </summary>
+        public abstract void SetupAudio3DSettings(Audio3DSettings audioSettings);
+
+        /// <summary>
+        /// Restart the audio currently playing
+        /// </summary>
+        public abstract void Restart();
+
         #region builder methods 
 
         /// <summary>
@@ -56,9 +69,40 @@ namespace Unknown.Manager.AudioManager {
         public abstract AudioPlayer SetAudioConfig(UnknownAudioConfig audioConfig);
 
         /// <summary>
-        /// Plays the audio from the curretn audio config
+        /// Plays the audio from the current audio config
         /// </summary>
         public abstract AudioPlayer Play();
+
+        /// <summary>
+        /// Sets delay before playing audio
+        /// </summary>
+        public abstract AudioPlayer SetDelay(float delay);
+
+        /// <summary>
+        /// Plays audio just using audio cilp
+        /// </summary>
+        public abstract AudioPlayer Play(AudioClip audioClip, float startPos = 0f, float endPos = 1f);
+
+        /// <summary>
+        /// To attack to other object
+        /// </summary>
+        public abstract AudioPlayer AttachTo(Transform parentObject);
+
+        /// <summary>
+        /// To make this audio player follow a follow Object | 
+        /// Note if the followObject will not be destroyed make sure you use AttackTo()
+        /// </summary>
+        public abstract AudioPlayer Follow(Transform followObject);
+
+
+        /// <summary>
+        /// Sets default parent after audio ends it returns to this parent
+        /// </summary>
+        public abstract AudioPlayer SetDefaultParent(Transform parent);
+
+        #endregion
+
+        #region event methods
 
         /// <summary>
         /// Subs to on audio ended event
@@ -66,9 +110,9 @@ namespace Unknown.Manager.AudioManager {
         public abstract AudioPlayer OnAudioEnded(Action callbackMethod);
 
         /// <summary>
-        /// Sets delay before playing audio
+        /// Subs to on loop step event
         /// </summary>
-        public abstract AudioPlayer SetDelay(float delay);
+        public abstract AudioPlayer OnLoopStep(Action callbackMethod);
 
         #endregion
 
@@ -82,17 +126,27 @@ namespace Unknown.Manager.AudioManager {
         /// </summary>
         public event Action onAudioEnded;
 
+        /// <summary>
+        /// Raised when audio is looped and single audio is ended
+        /// </summary>
+        public event Action onLoopStep;
+
         #endregion
 
 
         #region protected methods
 
+        protected void ResetEvents() {
+            onAudioEnded = null;
+            onLoopStep = null;
+        }
+
         protected void RaiseOnAudioEnded() {
             onAudioEnded?.Invoke();
         }
 
-        protected void ResetEvents() {
-            onAudioEnded = null;
+        protected void RaiseOnLoopStep() {
+            onLoopStep?.Invoke();
         }
 
         #endregion

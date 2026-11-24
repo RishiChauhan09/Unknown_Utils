@@ -5,15 +5,23 @@ using UnityEngine.UIElements;
 
 namespace Unknown.Manager.AudioManager {
 
-    [CustomPropertyDrawer(typeof(UnknownAudioClip))]
-    public class UnknownAudioClipDrawer : PropertyDrawer {
+    public class UnknownAudioClipDrawer {
 
-        public override VisualElement CreatePropertyGUI(SerializedProperty property) {
-            SerializedProperty clipProperty = property.FindPropertyRelative(UnknownAudioClip.NameOf.AudioClip);
-            SerializedProperty volumeProperty = property.FindPropertyRelative(UnknownAudioClip.NameOf.Volume);
+        EditorAudioPlayer audioPlayer;
+        SerializedProperty clipProperty;
+        SerializedProperty volumeProperty;
+        SerializedProperty startPos;
+        SerializedProperty endPos;
+        Button playButton;
 
-            SerializedProperty startPos = property.FindPropertyRelative(UnknownAudioClip.NameOf.StartPosition);
-            SerializedProperty endPos = property.FindPropertyRelative(UnknownAudioClip.NameOf.EndPosition);
+        private bool isAudioConfigPlaying = false;
+
+        public VisualElement CreateGUI(SerializedProperty property) {
+            clipProperty = property.FindPropertyRelative(UnknownAudioClip.NameOf.AudioClip);
+            volumeProperty = property.FindPropertyRelative(UnknownAudioClip.NameOf.Volume);
+
+            startPos = property.FindPropertyRelative(UnknownAudioClip.NameOf.StartPosition);
+            endPos = property.FindPropertyRelative(UnknownAudioClip.NameOf.EndPosition);
 
             // ============== root ==============
             var root = new VisualElement();
@@ -23,10 +31,7 @@ namespace Unknown.Manager.AudioManager {
             root.style.minWidth = 0;                 // lets children shrink instead of overflowing
 
             // ============== play / stop button ==============
-            bool isPlayingThis = false;
-            double stopAtTime = 0;
-
-            var playButton = new Button { text = "▶", tooltip = "Play / stop preview" };
+            playButton = new Button { text = "▶", tooltip = "Play / stop preview" };
             playButton.style.width = 24;
             playButton.style.height = 20;
             playButton.style.flexShrink = 0;
@@ -34,20 +39,10 @@ namespace Unknown.Manager.AudioManager {
             playButton.style.marginRight = 4;
             playButton.style.paddingLeft = playButton.style.paddingRight = 0;
 
-            playButton.clicked += () => {
-                if(isPlayingThis) {
-                    AudioPreview.Stop();
-                    isPlayingThis = false;
-
-                } else if(clipProperty.objectReferenceValue is AudioClip clip) {
-                    AudioPreview.Play(clip, Mathf.RoundToInt(clip.samples * startPos.floatValue));
-                    float length = (endPos.floatValue - startPos.floatValue) * clip.length;
-                    stopAtTime = EditorApplication.timeSinceStartup + length;
-                    isPlayingThis = true;
-                }
-                playButton.text = isPlayingThis ? "■" : "▶";
-            };
             root.Add(playButton);
+
+            // ============== Initializations ==============
+            isAudioConfigPlaying = false;
 
             // ============== clip field ==============
             var clipField = new ObjectField {
@@ -84,19 +79,8 @@ namespace Unknown.Manager.AudioManager {
             clipField.RegisterValueChangedCallback(_ => RefreshPlayEnabled());
             RefreshPlayEnabled();
 
-            // ============== reset the button when the preview ends on its own ==============
-            playButton.schedule.Execute(() => {
-                if(!isPlayingThis) return;
-
-                if(EditorApplication.timeSinceStartup >= stopAtTime) {
-                    AudioPreview.Stop();
-                    isPlayingThis = false;
-                    playButton.text = "▶";
-                } else if(!AudioPreview.IsPlaying()) {
-                    isPlayingThis = false;
-                    playButton.text = "▶";
-                }
-            }).Every(20);
+            // button methods 
+            playButton.clicked += PlayAudio;
 
             // ============== responsiveness ==============
             root.RegisterCallback<GeometryChangedEvent>(evt => {
@@ -112,15 +96,65 @@ namespace Unknown.Manager.AudioManager {
                 volumeSlider.style.width = w >= 420 ? 180 : 120;
             });
 
-            // ============== cleanup ==============
-            root.RegisterCallback<DetachFromPanelEvent>(_ => {
-                if(isPlayingThis) {
-                    AudioPreview.Stop();
-                    isPlayingThis = false;
-                }
-            });
-
             return root;
+        }
+
+        public void PlayAudio() {
+            if(audioPlayer == null)
+                audioPlayer = new EditorAudioPlayer();
+
+            if(audioPlayer.IsPlaying()) {
+                audioPlayer.Destroy();
+                playButton.text = "▶";
+            } else {
+
+                audioPlayer.Create()
+                    .SetVolume(volumeProperty.floatValue)
+                    .SetClip(clipProperty.objectReferenceValue as AudioClip)
+                    .Play(startPos.floatValue, endPos.floatValue)
+                    .OnComplete(() => {
+                        playButton.text = "▶";
+                    });
+                playButton.text = "■";
+            }
+        }
+
+        public EditorAudioPlayer PlayOrStopUsingAudioConfig(float volume, float pitch) {
+            if(isAudioConfigPlaying) {
+                audioPlayer?.Destroy();
+                audioPlayer = null;
+                isAudioConfigPlaying = false;
+                return null;
+            }
+
+            if(audioPlayer == null)
+                audioPlayer = new EditorAudioPlayer();
+
+            if(audioPlayer.IsPlaying()) {
+                audioPlayer.Stop();
+                audioPlayer.Destroy();
+                audioPlayer = null;
+                playButton.text = "▶";
+
+            } else {
+                isAudioConfigPlaying = true;
+                audioPlayer.Create()
+                    .SetClip(clipProperty.objectReferenceValue as AudioClip)
+                    .SetVolume(volume)
+                    .SetPitch(pitch)
+                    .Play(startPos.floatValue, endPos.floatValue)
+                    .OnComplete(() => {
+                        playButton.text = "▶";
+                        isAudioConfigPlaying = false;
+                    })
+                    .OnStop(() => {
+                        playButton.text = "▶";
+                        isAudioConfigPlaying = false;
+                    });
+                playButton.text = "■";
+            }
+
+            return audioPlayer;
         }
 
     }

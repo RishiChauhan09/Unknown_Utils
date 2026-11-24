@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Unknown.Manager.AudioManager {
 
-    [CreateAssetMenu(fileName = "AudioDatabase", menuName = "Unknown/Audio Manager/AudioDatabase")]
+    //[CreateAssetMenu(fileName = "AudioDatabase", menuName = "Unknown/Audio Manager/AudioDatabase")]
     public class AudioDatabase : ScriptableObject {
 
         public UnknownAudioGroup[] audioGroups;
@@ -25,6 +25,9 @@ namespace Unknown.Manager.AudioManager {
                 foreach(UnknownAudioGroup group in groups) {
 
                     if(group == null)
+                        continue;
+
+                    if(string.IsNullOrEmpty(group.groupName))
                         continue;
 
                     if(!groupLookup.TryAdd(group.groupName, group)) {
@@ -51,6 +54,9 @@ namespace Unknown.Manager.AudioManager {
                         continue;
 
                     string groupName = config.GetAudioID().groupName;
+
+                    if(string.IsNullOrEmpty(groupName))
+                        continue;
 
                     if(groupLookup.TryGetValue(groupName, out UnknownAudioGroup group)) {
                         newConfigs[group].Add(config);

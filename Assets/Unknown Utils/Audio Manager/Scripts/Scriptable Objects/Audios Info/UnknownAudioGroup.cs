@@ -1,17 +1,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Unknown.Manager.AudioManager {
 
-    [CreateAssetMenu(fileName = "AudioConfig", menuName = "Unknown/Audio Manager/Audio Group")]
+    [CreateAssetMenu(fileName = "Audio Group", menuName = "Unknown/Audio Manager/Audio Group")]
     public class UnknownAudioGroup : ScriptableObject {
 
         public string groupName;
 
-        public List<UnknownAudioConfig> audioConfigs;
+        public List<UnknownAudioConfig> audioConfigs = new();
 
-        private void OnValidate() {
+        public void OnValidate() {
+
+            if(groupName == name)
+                return;
+
             groupName = name;
+
+#if UNITY_EDITOR
+            foreach(UnknownAudioConfig config in audioConfigs) {
+
+                if(config == null)
+                    continue;
+
+                AudioID audioID = config.GetAudioID();
+
+                if(audioID == null || audioID.groupName == name)
+                    continue;
+
+                audioID.groupName = name;
+
+                EditorUtility.SetDirty(config);
+            }
+#endif
         }
 
         /// <summary>

@@ -1,11 +1,10 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Unknown.Manager.AudioManager {
 
-    [CreateAssetMenu(fileName = "AudioCategory", menuName = "Unknown/Audio Manager/AudioCategory")]
+    //[CreateAssetMenu(fileName = "AudioCategory", menuName = "Unknown/Audio Manager/AudioCategory")]
     public class AudioCategory : ScriptableObject {
 
         private const int MaxCategories = 32;
@@ -56,6 +55,13 @@ namespace Unknown.Manager.AudioManager {
             }
 
             return -1;
+        }
+
+        public string GetString(int index) {
+            if(index >= categories.Length || index < 0)
+                return null;
+
+            return categories[index];
         }
 
         public static List<string> GetAllTypes() {

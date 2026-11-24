@@ -10,8 +10,10 @@ namespace Unknown.Manager.AudioManager {
             if(audioClips.Length == 0)
                 return null;
 
-            if(audioClips.Length == 1)
+            if(audioClips.Length == 1) {
+                index = 0;
                 return audioClips[0];
+            }
 
             while(lastIndex == index) {
                 index = Random.Range(0, audioClips.Length);

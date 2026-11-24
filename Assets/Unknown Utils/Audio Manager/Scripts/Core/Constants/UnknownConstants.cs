@@ -44,5 +44,56 @@ namespace Unknown.Manager.AudioManager {
         /// </summary>
         public const float MinFrequency = 10f;
 
+
+        // =================== 3d settings ===================
+
+        /// <summary>
+        /// Default spartial blend for audio source
+        /// </summary>
+        public const float DefaultSpartialBlend = 0f;
+
+        /// <summary>
+        /// Default value for reverb zone mix for auido source
+        /// </summary>
+        public const float DefaultReverbZoneMix = 1f;
+
+        /// <summary>
+        /// Default value of dopper level for audio mixer
+        /// </summary>
+        public const float DefaultDopperLevel = 1f;
+
+        /// <summary>
+        /// Default value of spread for audio source
+        /// </summary>
+        public const float DefaultSpread = 0f;
+
+        /// <summary>
+        /// Default audio roll off mode for audio mixer
+        /// </summary>
+        public const AudioRolloffMode DefaultAudioRolloffMode = AudioRolloffMode.Logarithmic;
+
+        /// <summary>
+        /// Default value of min distance for auido source
+        /// </summary>
+        public const float DefaultMinDistance = 1f;
+
+        /// <summary>
+        /// Default value of max distance for auido source
+        /// </summary>
+        public const float DefaultMaxDistance = 500f;
+
+
+        // =================== effects ===================
+
+        /// <summary>
+        /// Default value of highpass in effects
+        /// </summary>
+        public const float DefaultHighpass = 10f;
+
+        /// <summary>
+        /// Default value of lowpass in effects 
+        /// </summary>
+        public const float DefaultLowpass = 22000f;
+
     }
 }

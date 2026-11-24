@@ -1,4 +1,3 @@
-using Codice.Client.Common.GameUI;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -17,11 +16,13 @@ namespace Unknown.Manager.AudioManager {
 
         // audio config things
         private const string AUDIO_GROUP_NAME = "GroupName";
+        private const string PLAY_BUTTON = "PlayButton";
+        private const string LOOP_TOGGLE = "LoopToggle";
+        private const string AUDIO_TYPE_VISUAL_ELEMENT = "AudioTypeRoot";
 
         // const fields audio clips 
         private const string START_POS = "clipStartPos";
         private const string END_POS = "clipEndPos";
-        private const string DELAY = "clipDelay";
         private const string CLIPS_LIST = "audioClipsListView";
 
         // overall settings things 
@@ -38,20 +39,44 @@ namespace Unknown.Manager.AudioManager {
         private const string START_POS_IMAGE = "startPosImage";
         private const string END_POS_IMAGE = "endPosImage";
 
+        // 3d settings
+        private const string SETTINGS_3D_OBJECT_FIELD = "3DSettingsField";
+        private const string NEW_3D_SETTINGS_BUTTON = "New3DSettingsButton";
+
         // ui fields 
         private DropdownField groupNameFieldDD;
+        private VisualElement audioTypeVisualElement;
         private ListView clipsListView;
         private FloatField startPosField;
         private FloatField endPosField;
-        private FloatField delayField;
         private Image clipImage;
         private Image startPosImage;
         private Image endPosImage;
         private MinMaxSlider trimSlider;
+        private Button playTestingAudioButton;
+        private ToolbarToggle loopToggle;
+
+        // 3d settings
+        private ObjectField settings3DObjectField;
+        private Button new3DSettingsButton;
 
         // private fields 
         private SerializedProperty currentClip;
+        private EditorAudioPlayer audioPlayer;
 
+        // toggle bar 
+        private ToolbarToggle volumeRndToggle;
+        private Slider volumeSlider;
+        private VisualElement volumeMinMaxSlider;
+
+        private ToolbarToggle pitchRndToggle;
+        private Slider pitchSlider;
+        private VisualElement pitchMinMaxSlider;
+
+        private Dictionary<int, UnknownAudioClipDrawer> clipDrawersByIndex;
+
+        // fields
+        private bool IsTestingLooped => loopToggle.value;
 
         public override VisualElement CreateInspectorGUI() {
             var root = new VisualElement();
@@ -64,25 +89,39 @@ namespace Unknown.Manager.AudioManager {
 
             // ============== getting all fields ==============
             groupNameFieldDD = root.Q<DropdownField>(AUDIO_GROUP_NAME);
+            audioTypeVisualElement = root.Q<VisualElement>(AUDIO_TYPE_VISUAL_ELEMENT);
             startPosField = root.Q<FloatField>(START_POS);
             endPosField = root.Q<FloatField>(END_POS);
-            delayField = root.Q<FloatField>(DELAY);
             clipsListView = root.Q<ListView>(CLIPS_LIST);
             clipImage = root.Q<Image>(CLIP_IMAGE);
             startPosImage = root.Q<Image>(START_POS_IMAGE);
             endPosImage = root.Q<Image>(END_POS_IMAGE);
             trimSlider = root.Q<MinMaxSlider>(TRIM_SLIDER);
+            playTestingAudioButton = root.Q<Button>(PLAY_BUTTON);
+            loopToggle = root.Q<ToolbarToggle>(LOOP_TOGGLE);
 
-            ToolbarToggle volumeRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_VOLUME);
-            Slider volumeSlider = root.Q<Slider>(MASTER_VOLUME_SLIDER);
-            VisualElement volumeMinMaxSlider = root.Q<VisualElement>(MASTER_VOLUME_SLIDER_MINMAX);
+            // 3d settings
+            settings3DObjectField = root.Q<ObjectField>(SETTINGS_3D_OBJECT_FIELD);
+            new3DSettingsButton = root.Q<Button>(NEW_3D_SETTINGS_BUTTON);
 
-            ToolbarToggle pitchRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_PITCH);
-            Slider pitchSlider = root.Q<Slider>(PITCH_SLIDER);
-            VisualElement pitchMinMaxSlider = root.Q<VisualElement>(PITCH_SLIDER_MINMAX);
+            volumeRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_VOLUME);
+            volumeSlider = root.Q<Slider>(MASTER_VOLUME_SLIDER);
+            volumeMinMaxSlider = root.Q<VisualElement>(MASTER_VOLUME_SLIDER_MINMAX);
+
+            pitchRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_PITCH);
+            pitchSlider = root.Q<Slider>(PITCH_SLIDER);
+            pitchMinMaxSlider = root.Q<VisualElement>(PITCH_SLIDER_MINMAX);
+
+            // ============== List initialization ==============
+            clipDrawersByIndex = new Dictionary<int, UnknownAudioClipDrawer>();
+            clipsListView.makeItem = MakeClipItem;
+            clipsListView.bindItem = BindClipItem;
 
             // ============== Updating Things ==============
             UpdateGroupDropDown();
+            Update3DSettings();
+            UpdateToggleBar();
+            UpdateAudioTypeProperty();
 
             // ============== events ==============
             clipsListView.selectionChanged += _ => RefreshFields();
@@ -108,6 +147,8 @@ namespace Unknown.Manager.AudioManager {
                 }
             });
 
+            playTestingAudioButton.clicked += PlayAudio;
+
             RefreshFields();
 
             return root;
@@ -121,12 +162,10 @@ namespace Unknown.Manager.AudioManager {
 
             startPosField.SetEnabled(hasSelection);
             endPosField.SetEnabled(hasSelection);
-            delayField.SetEnabled(hasSelection);
             trimSlider.SetEnabled(hasSelection);
 
             startPosField.Unbind();
             endPosField.Unbind();
-            delayField.Unbind();
             trimSlider.Unbind();
 
             currentClip = null;
@@ -138,7 +177,6 @@ namespace Unknown.Manager.AudioManager {
             SerializedProperty startPosProp = selectedClip.FindPropertyRelative(UnknownAudioClip.NameOf.StartPosition);
             SerializedProperty endPosProp = selectedClip.FindPropertyRelative(UnknownAudioClip.NameOf.EndPosition);
 
-            delayField.BindProperty(selectedClip.FindPropertyRelative(UnknownAudioClip.NameOf.Delay));
             startPosField.BindProperty(startPosProp);
             endPosField.BindProperty(endPosProp);
 
@@ -196,6 +234,22 @@ namespace Unknown.Manager.AudioManager {
             });
         }
 
+        private VisualElement MakeClipItem() {
+            return new VisualElement();
+        }
+
+        private void BindClipItem(VisualElement element, int index) {
+            element.Clear();
+
+            SerializedProperty property = audioClipsListProperty.GetArrayElementAtIndex(index);
+
+            UnknownAudioClipDrawer drawer = new UnknownAudioClipDrawer();
+
+            clipDrawersByIndex[index] = drawer;
+
+            element.Add(drawer.CreateGUI(property));
+        }
+
         private void InitializeAudioClip() {
 
             serializedObject.Update();
@@ -209,7 +263,6 @@ namespace Unknown.Manager.AudioManager {
                 return;
             }
 
-            addedClip.FindPropertyRelative(UnknownAudioClip.NameOf.Delay).floatValue = 0f;
             addedClip.FindPropertyRelative(UnknownAudioClip.NameOf.StartPosition).floatValue = 0f;
             addedClip.FindPropertyRelative(UnknownAudioClip.NameOf.EndPosition).floatValue = 1f;
             addedClip.FindPropertyRelative(UnknownAudioClip.NameOf.Volume).floatValue = 1f;
@@ -248,8 +301,14 @@ namespace Unknown.Manager.AudioManager {
             List<string> groupsName = database.GetGroupsName();
             groupNameFieldDD.choices = groupsName;
 
-            string currentGroupID = serializedObject.FindProperty(UnknownAudioConfig.NameOf.AudioGroupName).stringValue;
+            SerializedProperty groupNameProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.AudioGroupName);
+            string currentGroupID = groupNameProperty.stringValue;
             UnknownAudioConfig audioConfig = serializedObject.targetObject as UnknownAudioConfig;
+
+            if(string.IsNullOrEmpty(currentGroupID) && groupNameFieldDD.choices.Count > 0) {
+                groupNameProperty.stringValue = groupsName[0];
+                serializedObject.ApplyModifiedProperties();
+            }
 
             groupNameFieldDD.RegisterValueChangedCallback((evt) => {
                 UnknownAudioGroup group = database.GetGroup(currentGroupID);
@@ -267,8 +326,112 @@ namespace Unknown.Manager.AudioManager {
             });
         }
 
+        private void Update3DSettings() {
+            SerializedProperty settings3DProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.Audio3DSettings);
+            bool hasSettings = settings3DProperty.objectReferenceValue != null;
+
+            new3DSettingsButton.style.display = hasSettings ? DisplayStyle.None : DisplayStyle.Flex;
+
+            new3DSettingsButton.RegisterCallback<ClickEvent>(evt => {
+                Create3DSettings();
+            });
+
+            settings3DObjectField.RegisterValueChangedCallback(evt => {
+                bool hasSettings = settings3DProperty.objectReferenceValue != null;
+                new3DSettingsButton.style.display = hasSettings ? DisplayStyle.None : DisplayStyle.Flex;
+            });
+        }
+
+        private void Create3DSettings() {
+            string path = EditorUtility.SaveFilePanelInProject(
+                "Create 3D Settings",
+                "Audio 3D Settings",
+                "asset",
+                "Select where to save the 3D Settings asset."
+            );
+
+            if(string.IsNullOrEmpty(path))
+                return;
+
+            Audio3DSettings settings = CreateInstance<Audio3DSettings>();
+
+            AssetDatabase.CreateAsset(settings, path);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            SerializedProperty settings3DProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.Audio3DSettings);
+            settings3DProperty.objectReferenceValue = settings;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void UpdateToggleBar() {
+            SerializedProperty randomFlagsProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.RandomFlags);
+
+            RandomFlags randomFlags = (RandomFlags)randomFlagsProperty.intValue;
+
+            volumeRndToggle.value = (randomFlags & RandomFlags.Volume) > 0;
+            pitchRndToggle.value = (randomFlags & RandomFlags.Pitch) > 0;
+
+            UpdateGUIForRandom(volumeRndToggle, volumeSlider, volumeMinMaxSlider);
+            UpdateGUIForRandom(pitchRndToggle, pitchSlider, pitchMinMaxSlider);
+        }
+
+        private void UpdateAudioTypeProperty() {
+            SerializedProperty audioTypeProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.AudioType);
+
+            VisualElement audioTypeEle = AudioTypePropertyDrawer.CreateEditorGUI(audioTypeProperty);
+
+            audioTypeVisualElement.Add(audioTypeEle);
+        }
+
         #endregion
 
+        #region button methods 
+
+        private void PlayAudio() {
+            EditorApplication.update -= PlayAudio;
+
+            if(this.audioPlayer != null && this.audioPlayer.IsPlaying()) {
+                this.audioPlayer.Stop();
+                this.audioPlayer.Destroy();
+                this.audioPlayer = null;
+                playTestingAudioButton.text = "▶";
+
+                return;
+            }
+
+            UnknownAudioConfig audioConfig = serializedObject.targetObject as UnknownAudioConfig;
+
+            UnknownAudioClip audioClipInfo = audioConfig.PickNewClip(out int index);
+
+            if(!clipDrawersByIndex.ContainsKey(index)) {
+                Debug.LogWarning("Error in finding the index to play audio");
+            }
+
+            EditorAudioPlayer audioPlayer = clipDrawersByIndex[index].PlayOrStopUsingAudioConfig(audioClipInfo.volume * audioConfig.GetMasterVolume(),
+                audioConfig.GetPitch());
+
+            this.audioPlayer = audioPlayer;
+
+            if(audioPlayer.IsPlaying()) {
+                playTestingAudioButton.text = "■";
+
+                audioPlayer.OnComplete(() => {
+                    if(IsTestingLooped) {
+                        double delay = EditorApplication.timeSinceStartup + 0.1f;
+
+                        EditorApplication.update += PlayAudio;
+                    } else {
+                        playTestingAudioButton.text = "▶";
+                    }
+                });
+
+            } else {
+                playTestingAudioButton.text = "▶";
+            }
+        }
+
+        #endregion
 
     }
 }
