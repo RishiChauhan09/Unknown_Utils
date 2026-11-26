@@ -935,6 +935,8 @@ AudioMixerController:
     name: Highpass
   - guid: 69c8ebba280c9824e9aa9c2be9226c75
     name: Lowpass
+  - guid: 407cc5e40d90ffa4c95ebc2ad71809dd
+    name: MainVol
   - guid: 72c1dc6d47a5ea34ebe15172c696d36f
     name: MasterVol
   - guid: 557ea8fe60390934599c7ea5db973073
@@ -1064,6 +1066,7 @@ AudioMixerGroupController:
   m_GroupID: 15048a8696ef3a646bf0659f5a9ef439
   m_Children:
   - {fileID: 6386220095127448740}
+  - {fileID: -3182707421205351041}
   - {fileID: -7789677372291133641}
   - {fileID: -3063757550221554187}
   - {fileID: 5517064294650566150}
@@ -1101,15 +1104,45 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 014c9655cc361d147967875bdf681068
   m_FloatValues:
+    bf7b4e00a09fb27468eca32a10eefc65: 0
+    39d8c601cc0cf5f45a55a91af73c3372: 0
+    8b8fb4311af14f542bae57a25653f92c: 0
+    f17062428e94aac48b991f7e9e3e4793: 0
+    d999b48238986d04abccc78270dbde73: 0
+    fadadf82f579ead40a5ab7af348ab485: 0
     cb81a5b2609e36a43a1a76b7ba924639: 0.01
+    1925ebf2941a631448e19a1c4213d89a: 0
     6efc5f043f5749e48989e1dea519261b: 0
     74256e747e28cb8478e70aa483fb1951: 10
+    3d281b8404cc0ad4db426a2b765bba73: 0
+    8cf97994044d66c438f1ab1e97f5ba0e: 0
+    ddd8d3a4f309d104ba126ce2407af421: 0
+    4775e865b8af79d4faa563b3e9aa4a8f: -0
+    666ec695c74fbab438fd4b7147249e13: 0
+    a19c2246caf2b9f4a99cf5e83d32a320: 0
+    94fcf2c6bdd5d904d833fc4f11db8595: -0
+    169256978bcbbc6418231d23d8fde218: 0
+    dc963bb8330756b48a4c6bb89cf4f600: 0
+    76d58ce86d02f3d4883c7b02cd83f2e0: 0
+    34208c597d726a949b47e4db010971ec: 0
+    7a99f22a54961e1408a4024b31125b49: 0
+    535eb89a2493005409eee0d3bbd47dfb: 0
     69c8ebba280c9824e9aa9c2be9226c75: 22000
     070d760b9f40a2f478eb87e34580b2e1: 0
+    9ae3a71b740b01342906fb5b96a9c05a: 0
+    433cbc5bfbfad7d45a9c5deff5780d5b: 0
+    edfb777b103d12349b3aed72e6212704: 0
+    96e8bebb27ee57e41a1a8fc5e95b96b4: 0
     4fd79f0ceb9e81d438866b9fdd744108: 0
     a3c7b5dc6749ff84e92613620c9d3b79: 0
+    fd3e7b1d07cba6e449ce39d0288fffde: 0
     f675086d6a3410244b779a1cc01b3621: 1
     72c1dc6d47a5ea34ebe15172c696d36f: 0
+    6b96882e6ad666f448befb4e2afe6f06: -0
+    557ea8fe60390934599c7ea5db973073: 0
+    e063542f4f8b86846ad75ccb673e3614: 0
+    c4fb9a7f80a90234a89e8deecefbc944: 0
+    e25f75ff213e3eb48b822ee83c31bd0b: 0
   m_TransitionOverrides: {}
 --- !u!244 &32376785305765566
 AudioMixerEffectController:
@@ -1682,7 +1715,6 @@ AudioMixerGroupController:
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: f944c3e34c88c4d43bd453d799ec6dd1
   m_Children:
-  - {fileID: -3182707421205351041}
   - {fileID: -5741600480168098579}
   - {fileID: -1493479947671008143}
   - {fileID: -1228278090957451336}

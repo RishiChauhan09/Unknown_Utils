@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817102e133a9f8f43bc06c93c3dadea6, type: 3}
+  m_Name: Effects
+  m_EditorClassIdentifier: Assembly-CSharp::Unknown.Manager.AudioManager.UnknownAudioConfig
+  audioID:
+    id: Effects
+    groupName: Main Menu
+  masterVolume: {x: 0.9, y: 1}
+  pitch: {x: 0.9, y: 1}
+  isLoop: 0
+  loopSameAudio: 0
+  randomFlags: 5
+  audioType:
+    audioTypeName: Extra SFX
+    index: 5
+  clipSelectionStrategyType: 0
+  audioClips:
+  - <audioClip>k__BackingField: {fileID: 8300000, guid: e97ced5b60506c44fa9885a8b5f88606, type: 3}
+    <volume>k__BackingField: 1
+    <startPosition>k__BackingField: 0
+    <endPosition>k__BackingField: 1
+  audio3dSettings: {fileID: 11400000, guid: 1876dee6ff90d8b4688c1d6861ce0243, type: 2}

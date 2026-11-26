@@ -198,6 +198,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &509824427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 509824428}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &509824428
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509824427}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,14 +479,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce21c89355374e44695a01eb70ac05e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Testing
-  audioId:
-    id: Testing
-    groupName: Ice Area
+  loopAudioID:
+    id: Music
+    groupName: Main Menu
+  effectAudioID:
+    id: Effects
+    groupName: Main Menu
   audioType:
-    audioTypeName: SFX
-    index: 1
+    audioTypeName: Extra SFX
+    index: 5
   audioTypeMask:
-    maskValue: 0
+    maskValue: 28
   colorTesting: {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 0}
 --- !u!4 &706153451
 Transform:
@@ -504,10 +538,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1975125023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 17.791, y: 9.9701}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &820598991
 MonoBehaviour:
@@ -709,7 +743,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 17.7913, y: 9.9701}
+  m_SizeDelta: {x: 17.778, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -720,3 +754,4 @@ SceneRoots:
   - {fileID: 706153451}
   - {fileID: 1975125023}
   - {fileID: 189089304}
+  - {fileID: 509824428}

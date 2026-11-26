@@ -37,8 +37,12 @@ namespace Unknown.Manager.AudioManager {
 
                     if(CheckAudioGroups()) {
                         SerializedObject configSerializedObject = new SerializedObject(audioConfig);
-                        configSerializedObject.Update();
+
+                        audioConfig.InitialzeAudioConfig();
+                        configSerializedObject.ApplyModifiedProperties();
+
                         Selection.activeObject = audioConfig;
+
                         return;
                     }
 
@@ -149,7 +153,7 @@ namespace Unknown.Manager.AudioManager {
             UnknownAudioGroup audioGroup = ScriptableObject.CreateInstance<UnknownAudioGroup>();
 
             AssetDatabase.CreateAsset(audioGroup, path);
-            audioGroup.OnValidate();            // for updating the group name
+            audioGroup.UpdateGroupName();            // for updating the group name
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 

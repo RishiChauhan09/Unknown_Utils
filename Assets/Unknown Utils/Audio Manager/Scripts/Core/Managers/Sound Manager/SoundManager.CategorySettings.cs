@@ -9,7 +9,7 @@ namespace Unknown.Manager.AudioManager {
     public partial class SoundManager : MonoBehaviour {
 
         private struct AudioTypeValues {
-            public string volumeAudioString;        // string for audio mixer
+            public string volumeAudioString;        // string for audio mixer to set volume of this audio type
             public bool isMuted;                    // true & false
             public float previousValue;             // value from 0 - 1
             public AudioMixerGroup mixerGroup;
@@ -40,12 +40,12 @@ namespace Unknown.Manager.AudioManager {
                 }
 
                 AudioTypeValues audioTypeValues = new AudioTypeValues {
-                    volumeAudioString = UnknownNames.Type + i + "Vol",
+                    volumeAudioString = UnknownNames.TypeAudioMixer + i + "Vol",
                     isMuted = false,
                     previousValue = 1f
                 };
 
-                AudioMixerGroup[] groups = audioMixer.FindMatchingGroups(UnknownNames.Type + i.ToString());
+                AudioMixerGroup[] groups = audioMixer.FindMatchingGroups(UnknownNames.TypeAudioMixer + i.ToString());
 
                 if(groups.Length > 0) {
                     audioTypeValues.mixerGroup = groups[0];
@@ -77,7 +77,7 @@ namespace Unknown.Manager.AudioManager {
 
             // applying volume only if not muted.
             if(!values.isMuted)
-                audioMixer.SetFloat(audioType, volumeDB);
+                audioMixer.SetFloat(audioTypesVolumeStringLookup[audioType].volumeAudioString, volumeDB);
         }
 
         /// <summary>
@@ -105,11 +105,11 @@ namespace Unknown.Manager.AudioManager {
             audioTypesVolumeStringLookup[audioType] = values;
 
             if(isMuted) {
-                audioMixer.SetFloat(audioType, MinVolumeDB);
+                audioMixer.SetFloat(audioTypesVolumeStringLookup[audioType].volumeAudioString, MinVolumeDB);
             } else {
                 float volumeDB = values.previousValue <= 0f ? MinVolumeDB : Mathf.Log10(values.previousValue) * 20f;
 
-                audioMixer.SetFloat(audioType, volumeDB);
+                audioMixer.SetFloat(audioTypesVolumeStringLookup[audioType].volumeAudioString, volumeDB);
             }
         }
 

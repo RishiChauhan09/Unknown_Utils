@@ -21,7 +21,7 @@ namespace Unknown.Manager.AudioManager {
             dominatorsQueue = new Queue<AudioMixerGroup>(dominatorsCount);
 
             for(int i = 1; i <= dominatorsCount; i++) {
-                AudioMixerGroup[] groups = audioMixer.FindMatchingGroups($"{UnknownNames.Dominator}{i}");
+                AudioMixerGroup[] groups = audioMixer.FindMatchingGroups($"{UnknownNames.DominatorAudioMixer}{i}");
 
                 if(groups.Length == 0)
                     continue;
@@ -61,6 +61,7 @@ namespace Unknown.Manager.AudioManager {
         /// </summary>
         /// Note : This us used by effect player object
         public void LowPassEffects(float lowPassValue) {
+            audioMixer.SetFloat(UnknownNames.MainAudioMixerVolume, -80f);
             audioMixer.SetFloat(LOW_PASS_EFFCT, lowPassValue);
         }
 
@@ -69,6 +70,7 @@ namespace Unknown.Manager.AudioManager {
         /// </summary>
         /// Note : This us used by effect player object
         public void HighpassEffects(float highPassValue) {
+            audioMixer.SetFloat(UnknownNames.MainAudioMixerVolume, -80f);
             audioMixer.SetFloat(HIGH_PASS_EFFCT, highPassValue);
         }
 
@@ -79,6 +81,7 @@ namespace Unknown.Manager.AudioManager {
         public void SetEffectsVolume(float volume) {
             float volumeDB = volume <= 0f ? MinVolumeDB : Mathf.Log10(volume) * 20f;
 
+            audioMixer.SetFloat(UnknownNames.MainAudioMixerVolume, -80f);
             audioMixer.SetFloat(EFFECTS_VOL, volumeDB);
         }
 
@@ -90,6 +93,7 @@ namespace Unknown.Manager.AudioManager {
             audioMixer.SetFloat(HIGH_PASS_EFFCT, UnknownConstants.DefaultHighpass);
             audioMixer.SetFloat(LOW_PASS_EFFCT, UnknownConstants.DefaultLowpass);
             audioMixer.SetFloat(EFFECTS_VOL, UnknownConstants.FullDecibelVolume);
+            audioMixer.SetFloat(UnknownNames.MainAudioMixerVolume, 0f);
         }
 
         #endregion

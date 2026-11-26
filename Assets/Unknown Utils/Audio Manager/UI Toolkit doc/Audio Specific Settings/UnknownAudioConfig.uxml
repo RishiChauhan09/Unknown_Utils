@@ -10,7 +10,7 @@
             <ui:EnumField label="" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="ClipSelection" binding-path="clipSelectionStrategyType" tooltip="Decides how the clip is selected to play." style="width: 40%; height: 85%;"/>
             <ui:VisualElement name="AudioTypeRoot" style="flex-grow: 0; flex-shrink: 0; width: 30%;"/>
             <ui:Button text="▶" name="PlayButton" tooltip="Plays audio for testing" style="width: 12%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;"/>
-            <uie:ToolbarToggle label="" name="LoopToggle" class="toolbar-toggle" style="width: 12%; background-image: url(&quot;project://database/Assets/Unknown%20Utils/Audio%20Manager/Sprites/Icons/Loop%20white%20sprite.png?fileID=2800000&amp;guid=703ae3d39e5fb4644b14b20092573149&amp;type=3#Loop white sprite&quot;); background-size: 18px 14px; height: 20px;"/>
+            <uie:ToolbarToggle label="" name="LoopTogglePreview" class="toolbar-toggle" style="width: 12%; background-image: url(&quot;project://database/Assets/Unknown%20Utils/Audio%20Manager/Sprites/Icons/Loop%20white%20sprite.png?fileID=2800000&amp;guid=703ae3d39e5fb4644b14b20092573149&amp;type=3#Loop white sprite&quot;); background-size: 18px 14px; height: 20px;"/>
         </ui:VisualElement>
         <ui:TabView name="main-tabview" style="flex-grow: 1; flex-shrink: 0; flex-direction: column; background-color: rgb(48, 48, 48); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; margin-left: 0; margin-right: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-bottom: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
             <ui:Tab label="Clips Settings" name="ClipsSettings" tooltip="For changing settings of single cilps" style="flex-grow: 1; flex-direction: column; flex-shrink: 0; width: 100%; margin-top: 10px; padding-top: 0; padding-right: 7px; padding-bottom: 7px; padding-left: 7px;">
@@ -51,7 +51,8 @@
                     </ui:VisualElement>
                     <uie:ToolbarToggle label="Rnd" name="pitch-rnd-toggle" value="false" text="" data-source="" data-source-type="Unknown.Manager.AudioManager.UnknownAudioConfig, Assembly-CSharp" data-source-path="" class="toolbar-toggle" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 4px; margin-bottom: 0; margin-left: 10px; width: 50px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;"/>
                 </ui:VisualElement>
-                <ui:Toggle label="Is Loop" tooltip="To play audio on loop" name="isLoop" binding-path="isLoop"/>
+                <ui:Toggle label="Is Loop" tooltip="To play audio on loop" name="IsAudioLoop" binding-path="isLoop"/>
+                <ui:Toggle label="Loop Same Audio" tooltip="Enable if same audio is being played" name="LoopSameAudio" binding-path="loopSameAudio" style="margin-left: 24px;"/>
                 <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: space-evenly;">
                     <uie:ObjectField label="3D Settings" name="3DSettingsField" binding-path="audio3dSettings" type="Unknown.Manager.AudioManager.Audio3DSettings, Assembly-CSharp" allow-scene-objects="false" style="flex-grow: 1; flex-shrink: 1;"/>
                     <ui:Button text="New" name="New3DSettingsButton" style="flex-grow: 1;"/>

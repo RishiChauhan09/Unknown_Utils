@@ -26,31 +26,21 @@ namespace Unknown.Manager.AudioManager {
         private IAudioClip[] cachedAudioClips;
         private IClipSelectionStrategy clipSelectionStrategy;
 
+        private void OnEnable() {
+            cachedAudioClips = null;
+            UpdateAudioDetails();
+        }
+
         private void OnValidate() {
-            audioID.id = name;
-
-            if(audioClips == null || audioClips.Length == 0)
-                return;
-
-            foreach(UnknownAudioClip ac in audioClips) {
-                if(ac == null)
-                    continue;
-
-                ac.volume = Mathf.Clamp01(ac.volume);
-
-                ac.startPosition = Mathf.Clamp01(ac.startPosition);
-                ac.endPosition = Mathf.Clamp01(ac.endPosition);
-
-                if(ac.startPosition > ac.endPosition)
-                    ac.startPosition = ac.endPosition;
-            }
+            cachedAudioClips = null;
+            UpdateAudioDetails();
         }
 
         #region interface methods 
 
         public float GetMasterVolume() {
             if((randomFlags & RandomFlags.Volume) > 0) {
-                return UnityEngine.Random.Range(masterVolume.x, masterVolume.y);
+                return Random.Range(masterVolume.x, masterVolume.y);
             } else {
                 return masterVolume.y;
             }
@@ -58,7 +48,7 @@ namespace Unknown.Manager.AudioManager {
 
         public float GetPitch() {
             if((randomFlags & RandomFlags.Pitch) > 0) {
-                return UnityEngine.Random.Range(pitch.x, pitch.y);
+                return Random.Range(pitch.x, pitch.y);
             } else {
                 return pitch.y;
             }
@@ -123,6 +113,7 @@ namespace Unknown.Manager.AudioManager {
             return audioID;
         }
 
+
         public Audio3DSettings GetAudio3DSettings() {
             return audio3dSettings;
         }
@@ -131,9 +122,32 @@ namespace Unknown.Manager.AudioManager {
 
         #region private methods 
 
+        // Makes new clip selection strategy if it's null
         private void EnsureClipSelectionStrategy<T>() where T : IClipSelectionStrategy, new() {
             if(clipSelectionStrategy == null || clipSelectionStrategy.GetType() != typeof(T)) {
                 clipSelectionStrategy = new T();
+            }
+        }
+
+
+        // Updates the Audio Config details
+        private void UpdateAudioDetails() {
+            audioID.id = name;
+
+            if(audioClips == null || audioClips.Length == 0)
+                return;
+
+            foreach(UnknownAudioClip ac in audioClips) {
+                if(ac == null)
+                    continue;
+
+                ac.volume = Mathf.Clamp01(ac.volume);
+
+                ac.startPosition = Mathf.Clamp01(ac.startPosition);
+                ac.endPosition = Mathf.Clamp01(ac.endPosition);
+
+                if(ac.startPosition > ac.endPosition)
+                    ac.startPosition = ac.endPosition;
             }
         }
 
@@ -147,6 +161,16 @@ namespace Unknown.Manager.AudioManager {
 
         public void UnSetRandomFlag(RandomFlags flag) {
             randomFlags &= ~flag;
+        }
+
+        public void InitialzeAudioConfig() {
+            audioID.id = name;
+
+            masterVolume.x = .9f;
+            masterVolume.y = 1;
+
+            pitch.x = .9f;
+            pitch.y = 1;
         }
 
         #endregion

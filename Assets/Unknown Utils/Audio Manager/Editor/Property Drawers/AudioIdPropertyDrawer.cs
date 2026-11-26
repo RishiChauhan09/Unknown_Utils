@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -181,8 +182,20 @@ namespace Unknown.Manager.AudioManager {
                 string groupName = groupProperty.stringValue;
                 string id = idProperty.stringValue;
 
-                valueLabel.text = $"{groupName}/{id}";
-                selectButton.tooltip = valueLabel.text;
+                if(!AudioDatabase.IsAudioIDValid(groupName, id)) {
+                    valueLabel.text = "Select Audio ID";
+                    selectButton.tooltip = "";
+
+                    // resetting if not valid
+                    groupProperty.stringValue = "";
+                    idProperty.stringValue = "";
+
+                    property.serializedObject.ApplyModifiedProperties();
+
+                } else {
+                    valueLabel.text = $"{groupName}/{id}";
+                    selectButton.tooltip = valueLabel.text;
+                }
             }
 
             void ShowUpdateButtonValue(string audioGroup, string audioID) {

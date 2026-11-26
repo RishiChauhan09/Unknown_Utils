@@ -11,72 +11,78 @@ namespace Unknown.Manager.AudioManager {
 
         public VisualTreeAsset mainUxml;
 
-        // private variables
+        // ================== private variables ==================
         private SerializedProperty audioClipsListProperty;
 
-        // audio config things
+
+        // ================== top bar ================== 
         private const string AUDIO_GROUP_NAME = "GroupName";
         private const string PLAY_BUTTON = "PlayButton";
-        private const string LOOP_TOGGLE = "LoopToggle";
+        private const string LOOP_TOGGLE_PREVIEW = "LoopTogglePreview";
         private const string AUDIO_TYPE_VISUAL_ELEMENT = "AudioTypeRoot";
+        private DropdownField groupNameFieldDD;
+        private Button playTestingAudioButton;
+        private ToolbarToggle loopTogglePreview;
+        private VisualElement audioTypeVisualElement;
 
-        // const fields audio clips 
+
+        // ================== audio clips fields ================== 
         private const string START_POS = "clipStartPos";
         private const string END_POS = "clipEndPos";
         private const string CLIPS_LIST = "audioClipsListView";
+        private FloatField startPosField;
+        private FloatField endPosField;
+        private ListView clipsListView;
 
-        // overall settings things 
+
+        // ================== overall settings things ================== 
         private const string MASTER_VOLUME_SLIDER = "master-volume-slider";
         private const string MASTER_VOLUME_SLIDER_MINMAX = "master-volume-slider-minmax";
         private const string RND_TOGGLE_VOLUME = "volume-rnd-toggle";
         private const string PITCH_SLIDER = "pitch-slider";
         private const string PITCH_SLIDER_MINMAX = "pitch-slider-minmax";
         private const string RND_TOGGLE_PITCH = "pitch-rnd-toggle";
+        private const string IS_AUDIO_LOOP = "IsAudioLoop";
+        private const string LOOP_SAME_AUDIO = "LoopSameAudio";
+        private Slider volumeSlider;
+        private VisualElement volumeMinMaxSlider;
+        private ToolbarToggle volumeRndToggle;
+        private Slider pitchSlider;
+        private VisualElement pitchMinMaxSlider;
+        private ToolbarToggle pitchRndToggle;
+        private Toggle loopToggle;
+        private Toggle isSameAudioLoopToggle;
 
-        // image things
+
+        // ================== image things ================== 
         private const string TRIM_SLIDER = "trimSlider";
         private const string CLIP_IMAGE = "audioImage";
         private const string START_POS_IMAGE = "startPosImage";
         private const string END_POS_IMAGE = "endPosImage";
-
-        // 3d settings
-        private const string SETTINGS_3D_OBJECT_FIELD = "3DSettingsField";
-        private const string NEW_3D_SETTINGS_BUTTON = "New3DSettingsButton";
-
-        // ui fields 
-        private DropdownField groupNameFieldDD;
-        private VisualElement audioTypeVisualElement;
-        private ListView clipsListView;
-        private FloatField startPosField;
-        private FloatField endPosField;
+        private MinMaxSlider trimSlider;
         private Image clipImage;
         private Image startPosImage;
         private Image endPosImage;
-        private MinMaxSlider trimSlider;
-        private Button playTestingAudioButton;
-        private ToolbarToggle loopToggle;
 
-        // 3d settings
+
+        // ================== 3d settings ==================
+        private const string SETTINGS_3D_OBJECT_FIELD = "3DSettingsField";
+        private const string NEW_3D_SETTINGS_BUTTON = "New3DSettingsButton";
         private ObjectField settings3DObjectField;
         private Button new3DSettingsButton;
 
-        // private fields 
+
+        // ================== private fields ==================
         private SerializedProperty currentClip;
         private EditorAudioPlayer audioPlayer;
 
-        // toggle bar 
-        private ToolbarToggle volumeRndToggle;
-        private Slider volumeSlider;
-        private VisualElement volumeMinMaxSlider;
 
-        private ToolbarToggle pitchRndToggle;
-        private Slider pitchSlider;
-        private VisualElement pitchMinMaxSlider;
-
+        // ================== other fields ==================
         private Dictionary<int, UnknownAudioClipDrawer> clipDrawersByIndex;
 
-        // fields
-        private bool IsTestingLooped => loopToggle.value;
+
+        // ================== value fields ==================
+        private bool IsTestingLooped => loopTogglePreview.value;
 
         public override VisualElement CreateInspectorGUI() {
             var root = new VisualElement();
@@ -88,22 +94,28 @@ namespace Unknown.Manager.AudioManager {
             audioClipsListProperty = serializedObject.FindProperty(UnknownAudioConfig.NameOf.AudioClips);
 
             // ============== getting all fields ==============
+            // main top bar getters
             groupNameFieldDD = root.Q<DropdownField>(AUDIO_GROUP_NAME);
+            playTestingAudioButton = root.Q<Button>(PLAY_BUTTON);
             audioTypeVisualElement = root.Q<VisualElement>(AUDIO_TYPE_VISUAL_ELEMENT);
+            loopTogglePreview = root.Q<ToolbarToggle>(LOOP_TOGGLE_PREVIEW);
+
+            // audio clip related getters
             startPosField = root.Q<FloatField>(START_POS);
             endPosField = root.Q<FloatField>(END_POS);
             clipsListView = root.Q<ListView>(CLIPS_LIST);
+
+            // images getters
+            trimSlider = root.Q<MinMaxSlider>(TRIM_SLIDER);
             clipImage = root.Q<Image>(CLIP_IMAGE);
             startPosImage = root.Q<Image>(START_POS_IMAGE);
             endPosImage = root.Q<Image>(END_POS_IMAGE);
-            trimSlider = root.Q<MinMaxSlider>(TRIM_SLIDER);
-            playTestingAudioButton = root.Q<Button>(PLAY_BUTTON);
-            loopToggle = root.Q<ToolbarToggle>(LOOP_TOGGLE);
 
-            // 3d settings
+            // 3d settings getters
             settings3DObjectField = root.Q<ObjectField>(SETTINGS_3D_OBJECT_FIELD);
             new3DSettingsButton = root.Q<Button>(NEW_3D_SETTINGS_BUTTON);
 
+            // overall settings getters
             volumeRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_VOLUME);
             volumeSlider = root.Q<Slider>(MASTER_VOLUME_SLIDER);
             volumeMinMaxSlider = root.Q<VisualElement>(MASTER_VOLUME_SLIDER_MINMAX);
@@ -111,6 +123,9 @@ namespace Unknown.Manager.AudioManager {
             pitchRndToggle = root.Q<ToolbarToggle>(RND_TOGGLE_PITCH);
             pitchSlider = root.Q<Slider>(PITCH_SLIDER);
             pitchMinMaxSlider = root.Q<VisualElement>(PITCH_SLIDER_MINMAX);
+
+            loopToggle = root.Q<Toggle>(IS_AUDIO_LOOP);
+            isSameAudioLoopToggle = root.Q<Toggle>(LOOP_SAME_AUDIO);
 
             // ============== List initialization ==============
             clipDrawersByIndex = new Dictionary<int, UnknownAudioClipDrawer>();
@@ -122,6 +137,7 @@ namespace Unknown.Manager.AudioManager {
             Update3DSettings();
             UpdateToggleBar();
             UpdateAudioTypeProperty();
+            UpdateLoopToggle();
 
             // ============== events ==============
             clipsListView.selectionChanged += _ => RefreshFields();
@@ -382,6 +398,14 @@ namespace Unknown.Manager.AudioManager {
             VisualElement audioTypeEle = AudioTypePropertyDrawer.CreateEditorGUI(audioTypeProperty);
 
             audioTypeVisualElement.Add(audioTypeEle);
+        }
+
+        private void UpdateLoopToggle() {
+            isSameAudioLoopToggle.style.display = loopToggle.value ? DisplayStyle.Flex : DisplayStyle.None;
+
+            loopToggle.RegisterValueChangedCallback((evt) => {
+                isSameAudioLoopToggle.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+            });
         }
 
         #endregion

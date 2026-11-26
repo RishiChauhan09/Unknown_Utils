@@ -132,5 +132,51 @@ namespace Unknown.Manager.AudioManager {
 
             return null;
         }
+
+        #region Static Methods
+
+        /// <summary>
+        /// Returns if AudioID is valid or not
+        /// </summary>
+        public static bool IsAudioIDValid(AudioID audioID) {
+            if(!IsAudioGroupValid(audioID.groupName, out UnknownAudioGroup audioGroup))
+                return false;
+
+            UnknownAudioConfig audioConfig = audioGroup.GetAudioConfig(audioID.id);
+
+            if(audioConfig == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Returns if AudioID is valid or not
+        /// </summary>
+        public static bool IsAudioIDValid(string audioGroupName, string audioIDName) {
+            if(!IsAudioGroupValid(audioGroupName, out UnknownAudioGroup audioGroup))
+                return false;
+
+            UnknownAudioConfig audioConfig = audioGroup.GetAudioConfig(audioIDName);
+
+            if(audioConfig == null)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Returns if audio group is valid or not
+        /// </summary>
+        public static bool IsAudioGroupValid(string audioGroupName, out UnknownAudioGroup audioGroup) {
+            AudioDatabase audioDatabase = Resources.Load<AudioDatabase>(nameof(AudioDatabase));
+
+            audioGroup = audioDatabase.GetGroup(audioGroupName);
+
+            if(audioGroup == null)
+                return false;
+
+            return true;
+        }
+
+        #endregion
     }
 }

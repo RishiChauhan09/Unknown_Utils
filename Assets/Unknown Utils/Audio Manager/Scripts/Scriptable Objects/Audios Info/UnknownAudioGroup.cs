@@ -14,7 +14,15 @@ namespace Unknown.Manager.AudioManager {
 
         public List<UnknownAudioConfig> audioConfigs = new();
 
-        public void OnValidate() {
+        private void OnEnable() {
+            UpdateGroupName();
+        }
+
+        private void OnValidate() {
+            UpdateGroupName();
+        }
+
+        public void UpdateGroupName() {
 
             if(groupName == name)
                 return;
@@ -52,7 +60,10 @@ namespace Unknown.Manager.AudioManager {
             }
         }
 
-
+        /// <summary>
+        /// Removes audio config from this group
+        /// </summary>
+        /// <param name="configName"></param>
         public void RemoveConfig(string configName) {
             for(int i = 0; i < audioConfigs.Count; i++) {
                 if(audioConfigs[i].GetAudioID().id == configName) {
@@ -62,9 +73,25 @@ namespace Unknown.Manager.AudioManager {
             }
         }
 
+        /// <summary>
+        /// Adds audio config to this group
+        /// </summary>
         public void AddConfig(UnknownAudioConfig config) {
             audioConfigs.Add(config);
             CheckDuplicate();
+        }
+
+        /// <summary>
+        /// Returns AudioConfig and null if not present
+        /// </summary>
+        public UnknownAudioConfig GetAudioConfig(string id) {
+            for(int i = 0; i < audioConfigs.Count; i++) {
+                if(audioConfigs[i].GetAudioID().id == id) {
+                    return audioConfigs[i];
+                }
+            }
+
+            return null;
         }
 
     }

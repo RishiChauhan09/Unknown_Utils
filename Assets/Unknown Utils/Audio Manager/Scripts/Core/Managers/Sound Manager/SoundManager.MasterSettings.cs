@@ -13,7 +13,7 @@ namespace Unknown.Manager.AudioManager {
         private float masterPreviousVolume = 1f;
 
         private void InitializeSoundManagerMasterSettings() {
-            MASTER_VOLUME = UnknownNames.Master + "Vol";
+            MASTER_VOLUME = UnknownNames.MasterAudioMixer + "Vol";
         }
 
         #region Public Methods
